@@ -48,6 +48,14 @@ public class BenchmarksRow {
         return score;
     }
 
+    public String getBranch() {
+        return branch;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
     @Override
     public String toString() {
         return "BenchmarksRow{" +

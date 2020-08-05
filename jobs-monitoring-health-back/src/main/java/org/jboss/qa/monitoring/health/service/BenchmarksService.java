@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.jboss.qa.monitoring.health.data.BenchmarksRow;
 import org.jboss.qa.monitoring.health.data.JobRow;
+import org.jboss.qa.monitoring.health.definitions.BenchmarksColumns;
 import org.jboss.qa.monitoring.health.definitions.CsvFileColumns;
 import org.jboss.qa.monitoring.health.util.CsvLoader;
 import org.json.simple.JSONArray;
@@ -48,9 +49,7 @@ public class BenchmarksService {
                             result.set(e.getMessage());
                         }
                     });
-                } catch (IOException e) {
-                    result.set(e.getMessage());
-                } catch (ParseException e) {
+                } catch (Exception e) {
                     result.set(e.getMessage());
                 }
             }
@@ -61,7 +60,15 @@ public class BenchmarksService {
 
     public void postJsonContent(String url, BenchmarksRow benchmarksRow) throws URISyntaxException {
         URI uri = new URI(url);
-        ResponseEntity<String> result = restTemplate.postForEntity(uri, benchmarksRow, String.class);
+
+        JSONObject jsonData = new JSONObject();
+        jsonData.put(BenchmarksColumns.JOB.getColumn(), benchmarksRow.getJob());
+        jsonData.put(BenchmarksColumns.BENCHMARK.getColumn(), benchmarksRow.getBenchmark());
+        jsonData.put(BenchmarksColumns.BRANCH.getColumn(), benchmarksRow.getBranch());
+        jsonData.put(BenchmarksColumns.PRODUCT.getColumn(), benchmarksRow.getProduct());
+        jsonData.put(BenchmarksColumns.SCORE.getColumn(), benchmarksRow.getScore());
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, jsonData, String.class);
     }
 
     public JSONObject getJsonContent(String url) {
