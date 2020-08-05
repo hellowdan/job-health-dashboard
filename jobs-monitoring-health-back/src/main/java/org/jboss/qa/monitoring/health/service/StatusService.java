@@ -20,11 +20,8 @@ public class StatusService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private String URI_ALL_JOBS = "https://jobs-health-dashboard-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/jobs";
-    private String URI_UPDATE_STATUS = "https://jobs-health-dashboard-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/updateStatus";
-
-//    private String URI_ALL_JOBS = "http://localhost:8080/api/jobs";
-//    private String URI_UPDATE_STATUS = "http://localhost:8080/api/updateStatus";
+    private String URI_ALL_JOBS = "http://jobs-health-monitoring-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/jobs";
+    private String URI_UPDATE_STATUS = "http://jobs-health-monitoring-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/updateStatus";
 
     public String updateStatus() {
         AtomicReference<String> result = new AtomicReference<>("SUCCESS");

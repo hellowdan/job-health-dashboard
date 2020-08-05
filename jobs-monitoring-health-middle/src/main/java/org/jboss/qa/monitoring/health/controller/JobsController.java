@@ -26,21 +26,21 @@ public class JobsController {
 
     @GetMapping(value = "jobs")
     public ResponseEntity<List<JobsEntity>> getAllJobs() {
-        List<JobsEntity> JobsEntityList = jobsService.getAllJobs();
-        return new ResponseEntity<List<JobsEntity>>(JobsEntityList, HttpStatus.OK);
+        List<JobsEntity> jobsEntityList = jobsService.getAllJobs();
+        return new ResponseEntity<List<JobsEntity>>(jobsEntityList, HttpStatus.OK);
     }
 
     @GetMapping(value = "job/{id}")
     public ResponseEntity<JobsEntity> getJob(@PathVariable("id") int id) {
-        JobsEntity JobsEntity = jobsService.getJobById(id);
-        return new ResponseEntity<JobsEntity>(JobsEntity, HttpStatus.OK);
+        JobsEntity jobsEntity = jobsService.getJobById(id);
+        return new ResponseEntity<JobsEntity>(jobsEntity, HttpStatus.OK);
     }
 
     @PostMapping(value="add-job", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Void> addJob(@RequestBody JobsEntity JobsEntity, UriComponentsBuilder builder) {
-        jobsService.saveJob(JobsEntity);
+    public ResponseEntity<Void> addJob(@RequestBody JobsEntity jobsEntity, UriComponentsBuilder builder) {
+        jobsService.saveJob(jobsEntity);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(builder.path("/job/{id}").buildAndExpand(JobsEntity.getId()).toUri());
+        headers.setLocation(builder.path("/job/{id}").buildAndExpand(jobsEntity.getId()).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.OK);
     }
 
