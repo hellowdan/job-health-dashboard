@@ -1,20 +1,16 @@
 package org.jboss.qa.monitoring.health.controller;
 
 import org.jboss.qa.monitoring.health.definitions.BenchmarkColumns;
-import org.jboss.qa.monitoring.health.definitions.StatusColumns;
 import org.jboss.qa.monitoring.health.model.BenchmarksEntity;
-import org.jboss.qa.monitoring.health.model.JobsEntity;
 import org.jboss.qa.monitoring.health.service.BenchmarksService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "api")

@@ -24,14 +24,14 @@ public class BenchmarksEntity {
     @Column(name="job")
     private String job;
 
-    @Column(name="id")
+    @Column(name="product")
     private String product;
 
     @Column(name="branch")
     private String branch;
 
-    @Column(name="name")
-    private String name;
+    @Column(name="benchmark")
+    private String benchmark;
 
     @Column(name="score")
     private String score;
@@ -58,10 +58,10 @@ public class BenchmarksEntity {
         return id;
     }
 
-    public BenchmarksEntity(String job, String name, String product, String branch, String score) {
+    public BenchmarksEntity(String job, String benchmark, String product, String branch, String score) {
         LocalDate localDate = LocalDate.now();
         this.job = job;
-        this.name = name;
+        this.benchmark = benchmark;
         this.product = product;
         this.branch = branch;
         this.score = score;
@@ -76,7 +76,7 @@ public class BenchmarksEntity {
     public String toString() {
         return "BenchmarksEntity{" +
                 "job='" + job + '\'' +
-                ", name='" + name + '\'' +
+                ", benchmark='" + benchmark + '\'' +
                 ", product='" + product + '\'' +
                 ", branch='" + branch + '\'' +
                 ", score=" + score +
