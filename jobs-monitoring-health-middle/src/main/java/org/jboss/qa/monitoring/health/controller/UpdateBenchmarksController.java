@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "api")
-public class BenchmarksController {
+public class UpdateBenchmarksController {
 
     @Autowired
     private BenchmarksService benchmarksService;
