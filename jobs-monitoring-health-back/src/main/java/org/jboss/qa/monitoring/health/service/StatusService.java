@@ -51,7 +51,6 @@ public class StatusService {
     public void postJsonContent(String url, JSONObject dataJSON) throws URISyntaxException {
         URI uri = new URI(url);
         ResponseEntity<String> result = restTemplate.postForEntity(uri, dataJSON, String.class);
-        System.out.println(result);
     }
 
     public JSONObject getJsonContent(String url) {

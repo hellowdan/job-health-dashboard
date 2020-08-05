@@ -1,18 +1,15 @@
 package org.jboss.qa.monitoring.health.definitions;
 
-    public enum JobColumns {
-        ID("id"),
+    public enum BenchmarkColumns {
         JOB("job"),
-        ACTIVE("active"),
-        FOLDER("folder"),
+        BENCHMARK("benchmark"),
         PRODUCT("product"),
         BRANCH("branch"),
-        API_URL("apiUrl"),
-        LAST_BUILD_API_URL("lastBuildApiUrl");
+        SCORE("score");
 
         private String column;
 
-        JobColumns(String column) {
+        BenchmarkColumns(String column) {
             this.column = column;
         }
 
