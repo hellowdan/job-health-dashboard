@@ -10,8 +10,11 @@ public class StatusRow {
 
     private String url;
     private String lastBuild;
+    private String lastBuildNumber;
     private String lastSuccessfulBuild;
+    private String lastSuccessfulBuildNumber;
     private String lastFailedBuild;
+    private String lastFailedBuildNumber;
     private String lastBuildStatus;
     private int lastBuildStatusFlag;
     private String lastBuildDuration;
@@ -27,11 +30,20 @@ public class StatusRow {
         if (statusRow.get(StatusColumns.LAST_BUILD.getColumn()) != null) {
             this.lastBuild = statusRow.get(StatusColumns.LAST_BUILD.getColumn()).toString();
         }
+        if (statusRow.get(StatusColumns.LAST_BUILD_NUMBER.getColumn()) != null) {
+            this.lastBuildNumber = statusRow.get(StatusColumns.LAST_BUILD_NUMBER.getColumn()).toString();
+        }
         if (statusRow.get(StatusColumns.LAST_SUCCESSFUL_BUILD.getColumn()) != null) {
             this.lastSuccessfulBuild = statusRow.get(StatusColumns.LAST_SUCCESSFUL_BUILD.getColumn()).toString();
         }
+        if (statusRow.get(StatusColumns.LAST_SUCCESSFUL_BUILD_NUMBER.getColumn()) != null) {
+            this.lastBuildNumber = statusRow.get(StatusColumns.LAST_SUCCESSFUL_BUILD_NUMBER.getColumn()).toString();
+        }
         if (statusRow.get(StatusColumns.LAST_FAILED_BUILD.getColumn()) != null) {
             this.lastFailedBuild = statusRow.get(StatusColumns.LAST_FAILED_BUILD.getColumn()).toString();
+        }
+        if (statusRow.get(StatusColumns.LAST_FAILED_BUILD_NUMBER.getColumn()) != null) {
+            this.lastBuildNumber = statusRow.get(StatusColumns.LAST_FAILED_BUILD_NUMBER.getColumn()).toString();
         }
         if (statusRow.get(StatusColumns.LAST_BUILD_STATUS.getColumn()) != null) {
             this.lastBuildStatus = statusRow.get(StatusColumns.LAST_BUILD_STATUS.getColumn()).toString();
@@ -76,6 +88,18 @@ public class StatusRow {
 
     public Timestamp getLastBuildDateOfExecution() {
         return lastBuildDateOfExecution;
+    }
+
+    public String getLastBuildNumber() {
+        return lastBuildNumber;
+    }
+
+    public String getLastSuccessfulBuildNumber() {
+        return lastSuccessfulBuildNumber;
+    }
+
+    public String getLastFailedBuildNumber() {
+        return lastFailedBuildNumber;
     }
 
     public void setLastBuildStatus() {

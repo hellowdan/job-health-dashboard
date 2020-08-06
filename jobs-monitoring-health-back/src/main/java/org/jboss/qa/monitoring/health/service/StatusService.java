@@ -72,12 +72,21 @@ public class StatusService {
         }
         if (dataJsonJob.get(StatusColumns.LAST_BUILD.getColumn()) != null) {
             result.put(StatusColumns.LAST_BUILD.getColumn(), dataJsonJob.get(StatusColumns.LAST_BUILD.getColumn()).toString());
+            JSONObject resultsObject = (JSONObject) dataJsonJob.get(StatusColumns.LAST_BUILD.getColumn());
+            String number = resultsObject.get(StatusColumns.BUILD_NUMBER.getColumn()).toString();
+            result.put(StatusColumns.LAST_BUILD_NUMBER.getColumn(), number);
         }
         if (dataJsonJob.get(StatusColumns.LAST_SUCCESSFUL_BUILD.getColumn()) != null) {
             result.put(StatusColumns.LAST_SUCCESSFUL_BUILD.getColumn(), dataJsonJob.get(StatusColumns.LAST_SUCCESSFUL_BUILD.getColumn()).toString());
+            JSONObject resultsObject = (JSONObject) dataJsonJob.get(StatusColumns.LAST_SUCCESSFUL_BUILD.getColumn());
+            String number = resultsObject.get(StatusColumns.BUILD_NUMBER.getColumn()).toString();
+            result.put(StatusColumns.LAST_SUCCESSFUL_BUILD_NUMBER.getColumn(), number);
         }
         if (dataJsonJob.get(StatusColumns.LAST_FAILED_BUILD.getColumn()) != null) {
             result.put(StatusColumns.LAST_FAILED_BUILD.getColumn(), dataJsonJob.get(StatusColumns.LAST_FAILED_BUILD.getColumn()).toString());
+            JSONObject resultsObject = (JSONObject) dataJsonJob.get(StatusColumns.LAST_FAILED_BUILD.getColumn());
+            String number = resultsObject.get(StatusColumns.BUILD_NUMBER.getColumn()).toString();
+            result.put(StatusColumns.LAST_FAILED_BUILD_NUMBER.getColumn(), number);
         }
         if (dataJsonLastBuild.get(StatusColumns.LAST_BUILD_STATUS.getColumn()) != null) {
             result.put(StatusColumns.LAST_BUILD_STATUS.getColumn(), dataJsonLastBuild.get(StatusColumns.LAST_BUILD_STATUS.getColumn()).toString());

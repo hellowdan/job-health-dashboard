@@ -72,9 +72,9 @@ public class StatusEntity {
     public StatusEntity(StatusRow statusRow, JobsEntity jobsEntity) {
         LocalDate localDate = LocalDate.now();
         this.lastBuildUrl = statusRow.getUrl();
-        this.lastBuildNumber = statusRow.getLastBuild();
-        this.lastSuccessfulBuildNumber = statusRow.getLastSuccessfulBuild();
-        this.lastFailedBuildNumber = statusRow.getLastFailedBuild();
+        this.lastBuildNumber = statusRow.getLastBuildNumber();
+        this.lastSuccessfulBuildNumber = statusRow.getLastSuccessfulBuildNumber();
+        this.lastFailedBuildNumber = statusRow.getLastFailedBuildNumber();
         this.lastBuildStatus = statusRow.getLastBuildStatus();
         this.lastBuildStatusFlag = statusRow.getLastBuildStatusFlag();
         this.lastBuildDuration = Double.parseDouble(statusRow.getLastBuildDuration());
