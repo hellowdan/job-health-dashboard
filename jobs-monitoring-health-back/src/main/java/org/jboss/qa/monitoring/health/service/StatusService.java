@@ -3,6 +3,7 @@ package org.jboss.qa.monitoring.health.service;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -20,8 +21,8 @@ public class StatusService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private String URI_ALL_JOBS = "http://jobs-health-monitoring-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/jobs";
-    private String URI_UPDATE_STATUS = "http://jobs-health-monitoring-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/updateStatus";
+    private String URI_ALL_JOBS = "http://jobs-monitoring-health-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/jobs";
+    private String URI_UPDATE_STATUS = "http://jobs-monitoring-health-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/updateStatus";
 
     public String updateStatus() {
         AtomicReference<String> result = new AtomicReference<>("SUCCESS");
@@ -72,20 +73,20 @@ public class StatusService {
         }
         if (dataJsonJob.get(StatusColumns.LAST_BUILD.getColumn()) != null) {
             result.put(StatusColumns.LAST_BUILD.getColumn(), dataJsonJob.get(StatusColumns.LAST_BUILD.getColumn()).toString());
-            JSONObject resultsObject = (JSONObject) dataJsonJob.get(StatusColumns.LAST_BUILD.getColumn());
-            String number = resultsObject.get(StatusColumns.BUILD_NUMBER.getColumn()).toString();
+            LinkedHashMap resultNumber = (LinkedHashMap) dataJsonJob.get(StatusColumns.LAST_BUILD.getColumn());
+            String number = resultNumber.get(StatusColumns.BUILD_NUMBER.getColumn()).toString();
             result.put(StatusColumns.LAST_BUILD_NUMBER.getColumn(), number);
         }
         if (dataJsonJob.get(StatusColumns.LAST_SUCCESSFUL_BUILD.getColumn()) != null) {
             result.put(StatusColumns.LAST_SUCCESSFUL_BUILD.getColumn(), dataJsonJob.get(StatusColumns.LAST_SUCCESSFUL_BUILD.getColumn()).toString());
-            JSONObject resultsObject = (JSONObject) dataJsonJob.get(StatusColumns.LAST_SUCCESSFUL_BUILD.getColumn());
-            String number = resultsObject.get(StatusColumns.BUILD_NUMBER.getColumn()).toString();
+            LinkedHashMap resultNumber = (LinkedHashMap) dataJsonJob.get(StatusColumns.LAST_SUCCESSFUL_BUILD.getColumn());
+            String number = resultNumber.get(StatusColumns.BUILD_NUMBER.getColumn()).toString();
             result.put(StatusColumns.LAST_SUCCESSFUL_BUILD_NUMBER.getColumn(), number);
         }
         if (dataJsonJob.get(StatusColumns.LAST_FAILED_BUILD.getColumn()) != null) {
             result.put(StatusColumns.LAST_FAILED_BUILD.getColumn(), dataJsonJob.get(StatusColumns.LAST_FAILED_BUILD.getColumn()).toString());
-            JSONObject resultsObject = (JSONObject) dataJsonJob.get(StatusColumns.LAST_FAILED_BUILD.getColumn());
-            String number = resultsObject.get(StatusColumns.BUILD_NUMBER.getColumn()).toString();
+            LinkedHashMap resultNumber = (LinkedHashMap) dataJsonJob.get(StatusColumns.LAST_FAILED_BUILD.getColumn());
+            String number = resultNumber.get(StatusColumns.BUILD_NUMBER.getColumn()).toString();
             result.put(StatusColumns.LAST_FAILED_BUILD_NUMBER.getColumn(), number);
         }
         if (dataJsonLastBuild.get(StatusColumns.LAST_BUILD_STATUS.getColumn()) != null) {
