@@ -37,13 +37,13 @@ public class StatusRow {
             this.lastSuccessfulBuild = statusRow.get(StatusColumns.LAST_SUCCESSFUL_BUILD.getColumn()).toString();
         }
         if (statusRow.get(StatusColumns.LAST_SUCCESSFUL_BUILD_NUMBER.getColumn()) != null) {
-            this.lastBuildNumber = statusRow.get(StatusColumns.LAST_SUCCESSFUL_BUILD_NUMBER.getColumn()).toString();
+            this.lastSuccessfulBuildNumber = statusRow.get(StatusColumns.LAST_SUCCESSFUL_BUILD_NUMBER.getColumn()).toString();
         }
         if (statusRow.get(StatusColumns.LAST_FAILED_BUILD.getColumn()) != null) {
             this.lastFailedBuild = statusRow.get(StatusColumns.LAST_FAILED_BUILD.getColumn()).toString();
         }
         if (statusRow.get(StatusColumns.LAST_FAILED_BUILD_NUMBER.getColumn()) != null) {
-            this.lastBuildNumber = statusRow.get(StatusColumns.LAST_FAILED_BUILD_NUMBER.getColumn()).toString();
+            this.lastFailedBuildNumber = statusRow.get(StatusColumns.LAST_FAILED_BUILD_NUMBER.getColumn()).toString();
         }
         if (statusRow.get(StatusColumns.LAST_BUILD_STATUS.getColumn()) != null) {
             this.lastBuildStatus = statusRow.get(StatusColumns.LAST_BUILD_STATUS.getColumn()).toString();
