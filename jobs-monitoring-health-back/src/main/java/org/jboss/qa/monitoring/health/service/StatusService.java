@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.jboss.qa.monitoring.health.data.JobRow;
@@ -29,17 +30,20 @@ public class StatusService {
         List<JSONObject> dataJobs = getJsonNestedContent(URI_ALL_JOBS);
 
         dataJobs.forEach(jsonObject -> {
-
-            JobRow jobRow = new JobRow(jsonObject);
+            JobRow jobRow = new JobRow();
+            jobRow.parseJobRow(jsonObject);
 
             if (jobRow.getActive() > 0) {
-                JSONObject dataJsonLastBuild = getJsonContent(jobRow.getLastBuildApiUrl());
-                JSONObject dataJsonJob = getJsonContent(jobRow.getApiUrl());
-
-                JSONObject dataJSON = mergeJSONObjects(dataJsonLastBuild, dataJsonJob, jobRow.getId());
-
                 try {
-                    postJsonContent(URI_UPDATE_STATUS, dataJSON);
+                    JSONObject dataJsonLastBuild = getJsonContent(jobRow.getLastBuildApiUrl());
+                    JSONObject dataJsonJob = getJsonContent(jobRow.getApiUrl());
+
+                    boolean hasError = ((dataJsonLastBuild.containsKey("Error"))||(dataJsonJob.containsKey("Error")));
+
+                    if(!hasError) {
+                        JSONObject dataJSON = mergeJSONObjects(dataJsonLastBuild, dataJsonJob, jobRow.getId());
+                        postJsonContent(URI_UPDATE_STATUS, dataJSON);
+                    }
                 } catch (URISyntaxException e) {
                     result.set(e.getMessage());
                 }
@@ -55,12 +59,24 @@ public class StatusService {
     }
 
     public JSONObject getJsonContent(String url) {
-        return this.restTemplate.getForObject(url, JSONObject.class);
+        try {
+            return this.restTemplate.getForObject(url, JSONObject.class);
+        } catch (Exception e) {
+            JSONObject error = new JSONObject();
+            error.put("Error", e.getMessage());
+            return error;
+        }
     }
 
     public List<JSONObject> getJsonNestedContent(String url) {
-        JSONObject[] result = this.restTemplate.getForObject(url, JSONObject[].class);
-        return Arrays.asList(result);
+        try {
+            JSONObject[] result = this.restTemplate.getForObject(url, JSONObject[].class);
+            return Arrays.asList(result);
+        } catch (Exception e) {
+            JSONObject error = new JSONObject();
+            error.put("Error", e.getMessage());
+            return Arrays.asList(error);
+        }
     }
 
     public JSONObject mergeJSONObjects(JSONObject dataJsonLastBuild, JSONObject dataJsonJob, String jobId) {

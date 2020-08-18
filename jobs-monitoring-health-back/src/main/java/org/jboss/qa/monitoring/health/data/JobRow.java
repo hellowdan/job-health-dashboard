@@ -14,7 +14,10 @@ public class JobRow {
     private String lastBuildApiUrl;
     private String lastBuildResultFile;
 
-    public JobRow(JSONObject job) {
+    public JobRow() {
+    }
+
+    public void parseJobRow(JSONObject job){
         if (job.get(JobColumns.ID.getColumn()) != null) {
             this.id = job.get(JobColumns.ID.getColumn()).toString();
         }

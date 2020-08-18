@@ -9,9 +9,16 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.jboss.qa.monitoring.health.data.BenchmarksRow;
+import org.jboss.qa.monitoring.health.data.BuildtimeRow;
+import org.jboss.qa.monitoring.health.data.CepRow;
+import org.jboss.qa.monitoring.health.data.DmnRow;
 import org.jboss.qa.monitoring.health.data.JobRow;
+import org.jboss.qa.monitoring.health.data.OopathRow;
+import org.jboss.qa.monitoring.health.data.OperatorsRow;
+import org.jboss.qa.monitoring.health.data.RuntimeRow;
+import org.jboss.qa.monitoring.health.data.SessionRow;
+import org.jboss.qa.monitoring.health.definitions.BenchmarkTypes;
 import org.jboss.qa.monitoring.health.definitions.BenchmarksColumns;
-import org.jboss.qa.monitoring.health.definitions.CsvFileColumns;
 import org.jboss.qa.monitoring.health.util.CsvLoader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -27,8 +34,8 @@ public class BenchmarksService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private String URI_ALL_JOBS = "http://jobs-health-monitoring-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/jobs";
-    private String URI_UPDATE_STATUS = "http://jobs-health-monitoring-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/updateBenchmarks";
+    private String URI_ALL_JOBS = "http://jobs-monitoring-health-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com//api/jobs";
+    private String URI_UPDATE_BENCHMARKS = "http://jobs-monitoring-health-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com//api/updateBenchmarks";
 
     public String updateBenchmarks() {
         AtomicReference<String> result = new AtomicReference<>("SUCCESS");
@@ -36,15 +43,17 @@ public class BenchmarksService {
 
         dataJobs.forEach(jsonObject -> {
 
-            JobRow jobRow = new JobRow(jsonObject);
+            JobRow jobRow = new JobRow();
+            jobRow.parseJobRow(jsonObject);
 
             if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks"))) {
                 try {
-                    List<BenchmarksRow> benchmarksRows = getCsvData(jobRow.getLastBuildResultFile(), jobRow);
+                    BenchmarkTypes benchmarkType = BenchmarkTypes.getColumn(jobRow.getJob());
+                    List<BenchmarksRow> benchmarksRows = getCsvData(benchmarkType, jobRow.getLastBuildResultFile(), jobRow);
 
                     benchmarksRows.forEach(b -> {
                         try {
-                            postJsonContent(URI_UPDATE_STATUS, b);
+                            postJsonContent(URI_UPDATE_BENCHMARKS, b);
                         } catch (URISyntaxException e) {
                             result.set(e.getMessage());
                         }
@@ -71,41 +80,41 @@ public class BenchmarksService {
         ResponseEntity<String> result = restTemplate.postForEntity(uri, jsonData, String.class);
     }
 
-    public JSONObject getJsonContent(String url) {
-        return this.restTemplate.getForObject(url, JSONObject.class);
-    }
-
     public List<JSONObject> getJsonNestedContent(String url) {
-        JSONObject[] result = this.restTemplate.getForObject(url, JSONObject[].class);
-        return Arrays.asList(result);
+        try {
+            JSONObject[] result = this.restTemplate.getForObject(url, JSONObject[].class);
+            return Arrays.asList(result);
+        } catch (Exception e) {
+            JSONObject error = new JSONObject();
+            error.put("Error", e.getMessage());
+            return Arrays.asList(error);
+        }
     }
 
-    public List<BenchmarksRow> getCsvData(String filePath, JobRow jobRow) throws IOException, ParseException {
+    public List<BenchmarksRow> getCsvData(BenchmarkTypes benchmarkType, String filePath, JobRow jobRow) throws IOException, ParseException {
         List<BenchmarksRow> benchmarksRows = new ArrayList<>();
         JSONArray dataJson;
 
         CsvLoader csvLoader = new CsvLoader();
         dataJson = csvLoader.getDataFromCSV(filePath);
 
-        dataJson.forEach(resultRow -> benchmarksRows.add(parseReportRow((JSONObject) resultRow, jobRow)));
+        dataJson.forEach(resultRow -> {
+            BenchmarksRow benchmarksRow = null;
+            switch (benchmarkType) {
+                case DMN: benchmarksRow = new DmnRow();
+                case EVENT_PROCESSING: benchmarksRow = new CepRow(false);
+                case EVENT_PROCESSING_MULTITHREADED: benchmarksRow = new CepRow(true);
+                case OOPATH: benchmarksRow = new OopathRow();
+                case OPERATORS: benchmarksRow = new OperatorsRow();
+                case SESSION: benchmarksRow = new SessionRow();
+                case BUILDTIME: benchmarksRow = new BuildtimeRow();
+                case RUNTIME: benchmarksRow = new RuntimeRow(false);
+                case RUNTIME_MULTITHREADED: benchmarksRow = new RuntimeRow(true);
+            }
 
+            benchmarksRow.parseReportRow((JSONObject) resultRow, jobRow);
+            benchmarksRows.add(benchmarksRow);
+        });
         return benchmarksRows;
-    }
-
-    protected BenchmarksRow parseReportRow(JSONObject reportRow, JobRow jobRow) {
-        BenchmarksRow benchmarksRow = new BenchmarksRow();
-
-        benchmarksRow.setJob(jobRow.getJob());
-        benchmarksRow.setBranch(jobRow.getBranch());
-        benchmarksRow.setProduct(jobRow.getProduct());
-
-        if (reportRow.get(CsvFileColumns.BENCHMARK.getColumn()) != null) {
-            benchmarksRow.setBenchmark((String) reportRow.get(CsvFileColumns.BENCHMARK.getColumn()));
-        }
-        if (reportRow.get(CsvFileColumns.SCORE.getColumn()) != null) {
-            benchmarksRow.setScore(reportRow.get(CsvFileColumns.SCORE.getColumn()).toString());
-        }
-
-        return benchmarksRow;
     }
 }

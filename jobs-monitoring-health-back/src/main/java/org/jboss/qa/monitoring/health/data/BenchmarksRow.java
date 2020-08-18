@@ -1,12 +1,15 @@
 package org.jboss.qa.monitoring.health.data;
 
-public class BenchmarksRow {
+import org.jboss.qa.monitoring.health.definitions.CsvFileColumns;
+import org.json.simple.JSONObject;
 
-    private String job;
-    private String benchmark;
-    private String branch;
-    private String product;
-    private String score;
+public abstract class BenchmarksRow {
+
+    protected String job;
+    protected String benchmark;
+    protected String branch;
+    protected String product;
+    protected String score;
 
     public BenchmarksRow() {
     }
@@ -35,11 +38,6 @@ public class BenchmarksRow {
         this.score = score;
     }
 
-    public String getUniqueID() {
-        return "benchmark" + this.job +
-                "|name=" + this.benchmark;
-    }
-
     public String getBenchmark() {
         return benchmark;
     }
@@ -59,9 +57,24 @@ public class BenchmarksRow {
     @Override
     public String toString() {
         return "BenchmarksRow{" +
-                "benchmark='" + job + '\'' +
-                ", name='" + benchmark + '\'' +
+                "job='" + job + '\'' +
+                ", benchmark='" + benchmark + '\'' +
+                ", branch='" + branch + '\'' +
+                ", product='" + product + '\'' +
                 ", score=" + score +
                 '}';
+    }
+
+    public void parseReportRow(JSONObject reportRow, JobRow jobRow) {
+        this.job = jobRow.getJob();
+        this.branch = jobRow.getBranch();
+        this.product = jobRow.getProduct();
+
+        if (reportRow.get(CsvFileColumns.BENCHMARK.getColumn()) != null) {
+            this.benchmark = ((String) reportRow.get(CsvFileColumns.BENCHMARK.getColumn()));
+        }
+        if (reportRow.get(CsvFileColumns.SCORE.getColumn()) != null) {
+            this.score = reportRow.get(CsvFileColumns.SCORE.getColumn()).toString();
+        }
     }
 }
