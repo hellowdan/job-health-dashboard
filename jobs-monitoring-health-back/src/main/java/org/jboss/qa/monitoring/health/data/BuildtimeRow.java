@@ -1,7 +1,6 @@
 package org.jboss.qa.monitoring.health.data;
 
 import org.jboss.qa.monitoring.health.definitions.CsvBuildtimeFileColumns;
-import org.jboss.qa.monitoring.health.definitions.CsvFileColumns;
 import org.json.simple.JSONObject;
 
 public class BuildtimeRow extends BenchmarksRow {
