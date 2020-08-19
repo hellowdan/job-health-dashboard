@@ -7,7 +7,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -89,5 +91,18 @@ public class CsvLoader {
         jsonArray = (JSONArray) obj;
 
         return jsonArray;
+    }
+
+    public static boolean isUrlReachable(String targetUrl) throws IOException
+    {
+        HttpURLConnection httpUrlConnection = (HttpURLConnection) new URL(targetUrl).openConnection();
+        httpUrlConnection.setRequestMethod("HEAD");
+
+        try {
+            int responseCode = httpUrlConnection.getResponseCode();
+            return responseCode == HttpURLConnection.HTTP_OK;
+        } catch (UnknownHostException noInternetConnection) {
+            return false;
+        }
     }
 }

@@ -49,15 +49,23 @@ public class BenchmarksService {
             if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks"))) {
                 try {
                     BenchmarkTypes benchmarkType = BenchmarkTypes.getColumn(jobRow.getJob());
-                    List<BenchmarksRow> benchmarksRows = getCsvData(benchmarkType, jobRow.getLastBuildResultFile(), jobRow);
 
-                    benchmarksRows.forEach(b -> {
-                        try {
-                            postJsonContent(URI_UPDATE_BENCHMARKS, b);
-                        } catch (URISyntaxException e) {
-                            result.set(e.getMessage());
+                    if (CsvLoader.isUrlReachable(jobRow.getLastBuildResultFile())) {
+                        JSONArray dataJson = getJsonData(jobRow.getLastBuildResultFile());
+                        List<BenchmarksRow> benchmarksRows = getCsvData(benchmarkType, dataJson, jobRow);
+
+                        boolean hasError = benchmarksRows.size() == 0;
+
+                        if (!hasError) {
+                            benchmarksRows.forEach(b -> {
+                                try {
+                                    postJsonContent(URI_UPDATE_BENCHMARKS, b);
+                                } catch (URISyntaxException e) {
+                                    result.set(e.getMessage());
+                                }
+                            });
                         }
-                    });
+                    }
                 } catch (Exception e) {
                     result.set(e.getMessage());
                 }
@@ -91,25 +99,41 @@ public class BenchmarksService {
         }
     }
 
-    public List<BenchmarksRow> getCsvData(BenchmarkTypes benchmarkType, String filePath, JobRow jobRow) throws IOException, ParseException {
-        List<BenchmarksRow> benchmarksRows = new ArrayList<>();
-        JSONArray dataJson;
-
+    public JSONArray getJsonData(String filePath) {
         CsvLoader csvLoader = new CsvLoader();
-        dataJson = csvLoader.getDataFromCSV(filePath);
+        try {
+            return csvLoader.getDataFromCSV(filePath);
+        } catch (IOException e) {
+            return null;
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public List<BenchmarksRow> getCsvData(BenchmarkTypes benchmarkType, JSONArray dataJson, JobRow jobRow) {
+        List<BenchmarksRow> benchmarksRows = new ArrayList<>();
 
         dataJson.forEach(resultRow -> {
             BenchmarksRow benchmarksRow = null;
             switch (benchmarkType) {
-                case DMN: benchmarksRow = new DmnRow();
-                case EVENT_PROCESSING: benchmarksRow = new CepRow(false);
-                case EVENT_PROCESSING_MULTITHREADED: benchmarksRow = new CepRow(true);
-                case OOPATH: benchmarksRow = new OopathRow();
-                case OPERATORS: benchmarksRow = new OperatorsRow();
-                case SESSION: benchmarksRow = new SessionRow();
-                case BUILDTIME: benchmarksRow = new BuildtimeRow();
-                case RUNTIME: benchmarksRow = new RuntimeRow(false);
-                case RUNTIME_MULTITHREADED: benchmarksRow = new RuntimeRow(true);
+                case DMN:
+                    benchmarksRow = new DmnRow(); break;
+                case EVENT_PROCESSING:
+                    benchmarksRow = new CepRow(false); break;
+                case EVENT_PROCESSING_MULTITHREADED:
+                    benchmarksRow = new CepRow(true); break;
+                case OOPATH:
+                    benchmarksRow = new OopathRow(); break;
+                case OPERATORS:
+                    benchmarksRow = new OperatorsRow(); break;
+                case SESSION:
+                    benchmarksRow = new SessionRow(); break;
+                case BUILDTIME:
+                    benchmarksRow = new BuildtimeRow(); break;
+                case RUNTIME:
+                    benchmarksRow = new RuntimeRow(false); break;
+                case RUNTIME_MULTITHREADED:
+                    benchmarksRow = new RuntimeRow(true); break;
             }
 
             benchmarksRow.parseReportRow((JSONObject) resultRow, jobRow);
