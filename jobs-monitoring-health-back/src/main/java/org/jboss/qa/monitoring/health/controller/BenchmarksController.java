@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,20 @@ public class BenchmarksController {
         HttpHeaders headers = new HttpHeaders();
 
         String result = benchmarksService.updateBenchmarks();
+
+        if (result.equals("SUCCESS")) {
+            return new ResponseEntity<Void>(headers, HttpStatus.OK);
+        } else {
+            headers.add("FAIL", result);
+            return new ResponseEntity<Void>(headers, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping(value = "/updateBenchmark/{job}")
+    public ResponseEntity<Void> updateBenchmark(@PathVariable("job") String job) {
+        HttpHeaders headers = new HttpHeaders();
+
+        String result = benchmarksService.updateBenchmark(job);
 
         if (result.equals("SUCCESS")) {
             return new ResponseEntity<Void>(headers, HttpStatus.OK);

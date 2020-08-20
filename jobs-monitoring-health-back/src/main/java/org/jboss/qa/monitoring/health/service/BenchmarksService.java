@@ -75,6 +75,45 @@ public class BenchmarksService {
         return result.get();
     }
 
+    public String updateBenchmark(String benchmark) {
+        AtomicReference<String> result = new AtomicReference<>("SUCCESS");
+        List<JSONObject> dataJobs = getJsonNestedContent(URI_ALL_JOBS);
+
+        dataJobs.forEach(jsonObject -> {
+
+            JobRow jobRow = new JobRow();
+            jobRow.parseJobRow(jsonObject);
+
+            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks"))
+                    && (jobRow.getJob().equals(benchmark))) {
+                try {
+                    BenchmarkTypes benchmarkType = BenchmarkTypes.getColumn(jobRow.getJob());
+
+                    if (CsvLoader.isUrlReachable(jobRow.getLastBuildResultFile())) {
+                        JSONArray dataJson = getJsonData(jobRow.getLastBuildResultFile());
+                        List<BenchmarksRow> benchmarksRows = getCsvData(benchmarkType, dataJson, jobRow);
+
+                        boolean hasError = benchmarksRows.size() == 0;
+
+                        if (!hasError) {
+                            benchmarksRows.forEach(b -> {
+                                try {
+                                    postJsonContent(URI_UPDATE_BENCHMARKS, b);
+                                } catch (URISyntaxException e) {
+                                    result.set(e.getMessage());
+                                }
+                            });
+                        }
+                    }
+                } catch (Exception e) {
+                    result.set(e.getMessage());
+                }
+            }
+        });
+
+        return result.get();
+    }
+
     public void postJsonContent(String url, BenchmarksRow benchmarksRow) throws URISyntaxException {
         URI uri = new URI(url);
 
@@ -117,23 +156,32 @@ public class BenchmarksService {
             BenchmarksRow benchmarksRow = null;
             switch (benchmarkType) {
                 case DMN:
-                    benchmarksRow = new DmnRow(); break;
+                    benchmarksRow = new DmnRow();
+                    break;
                 case EVENT_PROCESSING:
-                    benchmarksRow = new CepRow(false); break;
+                    benchmarksRow = new CepRow(false);
+                    break;
                 case EVENT_PROCESSING_MULTITHREADED:
-                    benchmarksRow = new CepRow(true); break;
+                    benchmarksRow = new CepRow(true);
+                    break;
                 case OOPATH:
-                    benchmarksRow = new OopathRow(); break;
+                    benchmarksRow = new OopathRow();
+                    break;
                 case OPERATORS:
-                    benchmarksRow = new OperatorsRow(); break;
+                    benchmarksRow = new OperatorsRow();
+                    break;
                 case SESSION:
-                    benchmarksRow = new SessionRow(); break;
+                    benchmarksRow = new SessionRow();
+                    break;
                 case BUILDTIME:
-                    benchmarksRow = new BuildtimeRow(); break;
+                    benchmarksRow = new BuildtimeRow();
+                    break;
                 case RUNTIME:
-                    benchmarksRow = new RuntimeRow(false); break;
+                    benchmarksRow = new RuntimeRow(false);
+                    break;
                 case RUNTIME_MULTITHREADED:
-                    benchmarksRow = new RuntimeRow(true); break;
+                    benchmarksRow = new RuntimeRow(true);
+                    break;
             }
 
             benchmarksRow.parseReportRow((JSONObject) resultRow, jobRow);
