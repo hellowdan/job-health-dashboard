@@ -22,7 +22,8 @@ public class OperatorsRow extends BenchmarksRow {
     }
 
     public void updateBenchmarkTitle() {
-        this.benchmark = this.benchmark + '_' +
-                CsvOperatorsFileColumns.RULES_AND_FACTS_NUMBER.getColumn()+":"+this.rulesAndFactsNumber;
+        if (!this.rulesAndFactsNumber.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvOperatorsFileColumns.RULES_AND_FACTS_NUMBER.getColumn() + ":" + this.rulesAndFactsNumber;
+        }
     }
 }

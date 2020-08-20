@@ -117,26 +117,65 @@ public class SessionRow extends BenchmarksRow {
     }
 
     public void updateBenchmarkTitle() {
-        this.benchmark = this.benchmark + '_' +
-                CsvSessionFileColumns.ASYNC.getColumn()+":"+this.async + '_' +
-                CsvSessionFileColumns.ASYNC_INSERTS.getColumn()+":"+this.asyncInserts + '_' +
-                CsvSessionFileColumns.BATCH_FIRE.getColumn()+":"+this.batchFire + '_' +
-                CsvSessionFileColumns.CEP.getColumn()+":"+this.cep + '_' +
-                CsvSessionFileColumns.DO_UPDATE.getColumn()+":"+this.doUpdate + '_' +
-                CsvSessionFileColumns.EXERCISE_SESSION.getColumn()+":"+this.exerciseSession + '_' +
-                CsvSessionFileColumns.FACTS_NR.getColumn()+":"+this.factsNr + '_' +
-                CsvSessionFileColumns.INITIAL_SESSION_POOL_SIZE.getColumn()+":"+this.initialSessionPoolSize + '_' +
-                CsvSessionFileColumns.JOINS_NR.getColumn()+":"+this.joinsNr + '_' +
-                CsvSessionFileColumns.LOOP_COUNT.getColumn()+":"+this.loopCount + '_' +
-                CsvSessionFileColumns.MULTITHREAD.getColumn()+":"+this.multithread + '_' +
-                CsvSessionFileColumns.NUMBER_OF_FACTS.getColumn()+":"+this.numberOfFacts + '_' +
-                CsvSessionFileColumns.NUMBER_OF_RULES.getColumn()+":"+this.numberOfRules + '_' +
-                CsvSessionFileColumns.RULE_LINKED.getColumn()+":"+this.rulelinked + '_' +
-                CsvSessionFileColumns.RULES_NR.getColumn()+":"+this.rulesNr + '_' +
-                CsvSessionFileColumns.TREES_NR.getColumn()+":"+this.treesNr + '_' +
-                CsvSessionFileColumns.TYPES_NR.getColumn()+":"+this.typesNr + '_' +
-                CsvSessionFileColumns.USE_CANONICAL_MODEL.getColumn()+":"+this.useCanonicalModel + '_' +
-                CsvSessionFileColumns.USE_NOT_EXISTING_FIELD.getColumn()+":"+this.useNotExistingField + '_' +
-                CsvSessionFileColumns.USE_POOL.getColumn()+":"+this.usePool;
+        if (!this.async.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.ASYNC.getColumn() + ":" + this.async;
+        }
+        if (!this.asyncInserts.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.ASYNC_INSERTS.getColumn() + ":" + this.asyncInserts;
+        }
+        if (!this.batchFire.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.BATCH_FIRE.getColumn() + ":" + this.batchFire;
+        }
+        if (!this.cep.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.CEP.getColumn() + ":" + this.cep;
+        }
+        if (!this.doUpdate.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.DO_UPDATE.getColumn() + ":" + this.doUpdate;
+        }
+        if (!this.exerciseSession.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.EXERCISE_SESSION.getColumn() + ":" + this.exerciseSession;
+        }
+        if (!this.factsNr.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.FACTS_NR.getColumn() + ":" + this.factsNr;
+        }
+        if (!this.initialSessionPoolSize.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.INITIAL_SESSION_POOL_SIZE.getColumn() + ":" + this.initialSessionPoolSize;
+        }
+        if (!this.joinsNr.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.JOINS_NR.getColumn() + ":" + this.joinsNr;
+        }
+        if (!this.loopCount.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.LOOP_COUNT.getColumn() + ":" + this.loopCount;
+        }
+        if (!this.multithread.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.MULTITHREAD.getColumn() + ":" + this.multithread;
+        }
+        if (!this.numberOfFacts.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.NUMBER_OF_FACTS.getColumn() + ":" + this.numberOfFacts;
+        }
+        if (!this.numberOfRules.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.NUMBER_OF_RULES.getColumn() + ":" + this.numberOfRules;
+        }
+        if (!this.rulelinked.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.RULE_LINKED.getColumn() + ":" + this.rulelinked;
+        }
+        if (!this.rulesNr.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.RULES_NR.getColumn() + ":" + this.rulesNr;
+        }
+        if (!this.treesNr.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.TREES_NR.getColumn() + ":" + this.treesNr;
+        }
+        if (!this.typesNr.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.TYPES_NR.getColumn() + ":" + this.typesNr;
+        }
+        if (!this.useCanonicalModel.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.USE_CANONICAL_MODEL.getColumn() + ":" + this.useCanonicalModel;
+        }
+        if (!this.useNotExistingField.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.USE_NOT_EXISTING_FIELD.getColumn() + ":" + this.useNotExistingField;
+        }
+        if (!this.usePool.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvSessionFileColumns.USE_POOL.getColumn() + ":" + this.usePool;
+        }
     }
 }

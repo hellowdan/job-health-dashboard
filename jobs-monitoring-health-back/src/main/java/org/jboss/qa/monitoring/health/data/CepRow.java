@@ -24,9 +24,10 @@ public class CepRow extends BenchmarksRow {
     }
 
     public void updateBenchmarkTitle() {
-        this.benchmark = this.benchmark + '_' +
-                CsvCepFileColumns.RULES_AND_EVENTS_NUMBER.getColumn()+":"+this.rulesAndEventsNumber;
-        if(this.multithreaded){
+        if (!this.rulesAndEventsNumber.isEmpty()) {
+            this.benchmark = this.benchmark + '_' +CsvCepFileColumns.RULES_AND_EVENTS_NUMBER.getColumn() + ":" + this.rulesAndEventsNumber;
+        }
+        if (this.multithreaded) {
             this.benchmark = this.benchmark + "_multithreaded";
         }
     }

@@ -34,10 +34,17 @@ public class OopathRow extends BenchmarksRow {
     }
 
     public void updateBenchmarkTitle() {
-        this.benchmark = this.benchmark + '_' +
-                CsvOopathFileColumns.ACCUMULATE_FUNCTION.getColumn()+":"+this.accumulateFunction + '_' +
-                CsvOopathFileColumns.NUMBER_OF_FACTS.getColumn()+":"+this.numberOfFacts + '_' +
-                CsvOopathFileColumns.NUMBER_OF_PARENT_FACTS.getColumn()+":"+this.numberOfParentFacts + '_' +
-                CsvOopathFileColumns.NUMBER_OF_RULES.getColumn()+":"+this.numberOfRules;
+        if (!this.accumulateFunction.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvOopathFileColumns.ACCUMULATE_FUNCTION.getColumn() + ":" + this.accumulateFunction;
+        }
+        if (!this.numberOfFacts.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvOopathFileColumns.NUMBER_OF_FACTS.getColumn() + ":" + this.numberOfFacts;
+        }
+        if (!this.numberOfParentFacts.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvOopathFileColumns.NUMBER_OF_PARENT_FACTS.getColumn() + ":" + this.numberOfParentFacts;
+        }
+        if (!this.numberOfRules.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvOopathFileColumns.NUMBER_OF_RULES.getColumn() + ":" + this.numberOfRules;
+        }
     }
 }

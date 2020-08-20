@@ -54,15 +54,32 @@ public class DmnRow extends BenchmarksRow {
     }
 
     public void updateBenchmarkTitle() {
-        this.benchmark = this.benchmark + '_' +
-                CsvDmnFileColumns.EXPRESSION.getColumn()+":"+this.expression + '_' +
-                CsvDmnFileColumns.NUMBER_OF_DECISION_TABLE_RULES.getColumn()+":"+this.numberOfDecisionTableRules + '_' +
-                CsvDmnFileColumns.NUMBER_OF_DECISIONS.getColumn()+":"+this.numberOfDecisions + '_' +
-                CsvDmnFileColumns.NUMBER_OF_DECISIONS_WITH_BKM.getColumn()+":"+this.numberOfDecisionsWithBKM + '_' +
-                CsvDmnFileColumns.NUMBER_OF_DECISIONS_WITH_CONTEXT.getColumn()+":"+this.numberOfDecisionsWithContext + '_' +
-                CsvDmnFileColumns.NUMBER_OF_ELEMENTS.getColumn()+":"+this.numberOfElements + '_' +
-                CsvDmnFileColumns.PARAM.getColumn()+":"+this.param + '_' +
-                CsvDmnFileColumns.RESOURCE_NAME.getColumn()+":"+this.resourceName + '_' +
-                CsvDmnFileColumns.SPARSENESS.getColumn()+":"+this.sparseness;
+        if (!this.expression.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvDmnFileColumns.EXPRESSION.getColumn() + ":" + this.expression;
+        }
+        if (!this.numberOfDecisionTableRules.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvDmnFileColumns.NUMBER_OF_DECISION_TABLE_RULES.getColumn() + ":" + this.numberOfDecisionTableRules;
+        }
+        if (!this.numberOfDecisions.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvDmnFileColumns.NUMBER_OF_DECISIONS.getColumn() + ":" + this.numberOfDecisions;
+        }
+        if (!this.numberOfDecisionsWithBKM.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvDmnFileColumns.NUMBER_OF_DECISIONS_WITH_BKM.getColumn() + ":" + this.numberOfDecisionsWithBKM;
+        }
+        if (!this.numberOfDecisionsWithContext.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvDmnFileColumns.NUMBER_OF_DECISIONS_WITH_CONTEXT.getColumn() + ":" + this.numberOfDecisionsWithContext;
+        }
+        if (!this.numberOfElements.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvDmnFileColumns.NUMBER_OF_ELEMENTS.getColumn() + ":" + this.numberOfElements;
+        }
+        if (!this.param.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvDmnFileColumns.PARAM.getColumn() + ":" + this.param;
+        }
+        if (!this.resourceName.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvDmnFileColumns.RESOURCE_NAME.getColumn() + ":" + this.resourceName;
+        }
+        if (!this.sparseness.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvDmnFileColumns.SPARSENESS.getColumn() + ":" + this.sparseness;
+        }
     }
 }

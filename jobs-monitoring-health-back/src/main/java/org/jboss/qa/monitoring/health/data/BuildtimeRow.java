@@ -34,10 +34,17 @@ public class BuildtimeRow extends BenchmarksRow {
     }
 
     public void updateBenchmarkTitle() {
-        this.benchmark = this.benchmark + '_' +
-                CsvBuildtimeFileColumns.NUMBER_OF_RULES.getColumn()+":"+this.numberOfRules + '_' +
-                CsvBuildtimeFileColumns.NR_OF_RULES.getColumn()+":"+this.nrOfRules + '_' +
-                CsvBuildtimeFileColumns.USE_CANONICAL_MODEL.getColumn()+":"+this.useCanonicalModel + '_' +
-                CsvBuildtimeFileColumns.RULES_PROVIDER_ID.getColumn()+":"+this.rulesProviderId;
+        if (!this.numberOfRules.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvBuildtimeFileColumns.NUMBER_OF_RULES.getColumn() + ":" + this.numberOfRules;
+        }
+        if (!this.nrOfRules.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvBuildtimeFileColumns.NR_OF_RULES.getColumn() + ":" + this.nrOfRules;
+        }
+        if (!this.useCanonicalModel.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvBuildtimeFileColumns.USE_CANONICAL_MODEL.getColumn() + ":" + this.useCanonicalModel;
+        }
+        if (!this.rulesProviderId.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvBuildtimeFileColumns.RULES_PROVIDER_ID.getColumn() + ":" + this.rulesProviderId;
+        }
     }
 }

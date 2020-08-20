@@ -24,9 +24,10 @@ public class RuntimeRow extends BenchmarksRow {
     }
 
     public void updateBenchmarkTitle() {
-        this.benchmark = this.benchmark + '_' +
-                CsvRuntimeFileColumns.MATCH_RATIO.getColumn()+":"+this.matchRatio;
-        if(this.multithreaded){
+        if (!this.matchRatio.isEmpty()) {
+            this.benchmark = this.benchmark + '_' + CsvRuntimeFileColumns.MATCH_RATIO.getColumn() + ":" + this.matchRatio;
+        }
+        if (this.multithreaded) {
             this.benchmark = this.benchmark + "_multithreaded";
         }
     }
