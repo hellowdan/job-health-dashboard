@@ -25,6 +25,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -111,6 +112,8 @@ public class BenchmarksService {
                         }
                     });
                 }
+            } else {
+                throw new ResourceNotFoundException(String.format("CSV file not found on Jenkins server at %s", jobRow.getLastBuildResultFile()));
             }
         } catch (Exception e) {
             result.set(e.getMessage());
