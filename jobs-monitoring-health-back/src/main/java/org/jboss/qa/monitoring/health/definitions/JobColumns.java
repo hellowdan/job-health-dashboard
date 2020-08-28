@@ -7,6 +7,8 @@ package org.jboss.qa.monitoring.health.definitions;
         FOLDER("folder"),
         PRODUCT("product"),
         BRANCH("branch"),
+        SUBFOLDER("subfolder"),
+        SCHEDULE("schedule"),
         API_URL("apiUrl"),
         LAST_BUILD_API_URL("lastBuildApiUrl");
 

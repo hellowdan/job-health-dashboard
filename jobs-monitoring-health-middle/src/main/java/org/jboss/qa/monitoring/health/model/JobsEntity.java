@@ -15,16 +15,46 @@ import javax.persistence.Table;
 @Table(name = "jobs")
 public class JobsEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+    @Column(name = "job")
+    private String job;
+    @Column(name = "product")
+    private String product;
+    @Column(name = "branch")
+    private String branch;
+    @Column(name = "folder")
+    private String folder;
+    @Column(name = "schedule")
+    private String schedule;
+    @Column(name = "subfolder")
+    private String subfolder;
+    @Column(name = "url")
+    private String url;
+    @Column(name = "api_Url")
+    private String apiUrl;
+    @Column(name = "last_build_api_url")
+    private String lastBuildApiUrl;
+    @Column(name = "active")
+    private int active;
+    @OneToMany(mappedBy = "jobsEntity", cascade = CascadeType.ALL)
+    private List<StatusEntity> statusEntityList;
+
+    public JobsEntity() {
+    }
+
     public Long getId() {
         return id;
     }
 
-    public String getJob() {
-        return job;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getJob() {
+        return job;
     }
 
     public void setJob(String job) {
@@ -59,39 +89,12 @@ public class JobsEntity {
         return folder;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private Long id;
+    public String getSchedule() {
+        return schedule;
+    }
 
-    @Column(name="job")
-    private String job;
-
-    @Column(name="product")
-    private String product;
-
-    @Column(name="branch")
-    private String branch;
-
-    @Column(name="folder")
-    private String folder;
-
-    @Column(name="url")
-    private String url;
-
-    @Column(name="api_Url")
-    private String apiUrl;
-
-    @Column(name="last_build_api_url")
-    private String lastBuildApiUrl;
-
-    @Column(name="active")
-    private int active;
-
-    @OneToMany(mappedBy = "jobsEntity", cascade = CascadeType.ALL)
-    private List<StatusEntity> statusEntityList;
-
-    public JobsEntity() {
+    public String getSubfolder() {
+        return subfolder;
     }
 
     @Override
@@ -101,11 +104,12 @@ public class JobsEntity {
                 ", product='" + product + '\'' +
                 ", branch='" + branch + '\'' +
                 ", folder='" + folder + '\'' +
+                ", schedule='" + schedule + '\'' +
+                ", subfolder='" + subfolder + '\'' +
                 ", url='" + url + '\'' +
                 ", apiUrl=" + apiUrl +
                 ", lastBuildApiUrl=" + lastBuildApiUrl +
                 ", active=" + active +
                 '}';
     }
-
 }

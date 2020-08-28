@@ -19,6 +19,7 @@ import org.jboss.qa.monitoring.health.data.RuntimeRow;
 import org.jboss.qa.monitoring.health.data.SessionRow;
 import org.jboss.qa.monitoring.health.definitions.BenchmarkTypes;
 import org.jboss.qa.monitoring.health.definitions.BenchmarksColumns;
+import org.jboss.qa.monitoring.health.definitions.ScheduleType;
 import org.jboss.qa.monitoring.health.util.CsvLoader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -47,28 +48,24 @@ public class BenchmarksService {
             jobRow.parseJobRow(jsonObject);
 
             if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks"))) {
-                try {
-                    BenchmarkTypes benchmarkType = BenchmarkTypes.getColumn(jobRow.getJob());
+                result.set(processBenchmarkPost(jobRow));
+            }
+        });
 
-                    if (CsvLoader.isUrlReachable(jobRow.getLastBuildResultFile())) {
-                        JSONArray dataJson = getJsonData(jobRow.getLastBuildResultFile());
-                        List<BenchmarksRow> benchmarksRows = getCsvData(benchmarkType, dataJson, jobRow);
+        return result.get();
+    }
 
-                        boolean hasError = benchmarksRows.size() == 0;
+    public String updateBenchmarks(ScheduleType scheduleType) {
+        AtomicReference<String> result = new AtomicReference<>("SUCCESS");
+        List<JSONObject> dataJobs = getJsonNestedContent(URI_ALL_JOBS);
 
-                        if (!hasError) {
-                            benchmarksRows.forEach(b -> {
-                                try {
-                                    postJsonContent(URI_UPDATE_BENCHMARKS, b);
-                                } catch (URISyntaxException e) {
-                                    result.set(e.getMessage());
-                                }
-                            });
-                        }
-                    }
-                } catch (Exception e) {
-                    result.set(e.getMessage());
-                }
+        dataJobs.forEach(jsonObject -> {
+
+            JobRow jobRow = new JobRow();
+            jobRow.parseJobRow(jsonObject);
+
+            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks")) && (jobRow.getSchedule().equals(scheduleType.getColumn()))) {
+                result.set(processBenchmarkPost(jobRow));
             }
         });
 
@@ -76,7 +73,7 @@ public class BenchmarksService {
     }
 
     public String updateBenchmark(String benchmark) {
-        AtomicReference<String> result = new AtomicReference<>("SUCCESS");
+        AtomicReference<String> result = new AtomicReference<>("");
         List<JSONObject> dataJobs = getJsonNestedContent(URI_ALL_JOBS);
 
         dataJobs.forEach(jsonObject -> {
@@ -86,30 +83,38 @@ public class BenchmarksService {
 
             if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks"))
                     && (jobRow.getJob().equals(benchmark))) {
-                try {
-                    BenchmarkTypes benchmarkType = BenchmarkTypes.getColumn(jobRow.getJob());
-
-                    if (CsvLoader.isUrlReachable(jobRow.getLastBuildResultFile())) {
-                        JSONArray dataJson = getJsonData(jobRow.getLastBuildResultFile());
-                        List<BenchmarksRow> benchmarksRows = getCsvData(benchmarkType, dataJson, jobRow);
-
-                        boolean hasError = benchmarksRows.size() == 0;
-
-                        if (!hasError) {
-                            benchmarksRows.forEach(b -> {
-                                try {
-                                    postJsonContent(URI_UPDATE_BENCHMARKS, b);
-                                } catch (URISyntaxException e) {
-                                    result.set(e.getMessage());
-                                }
-                            });
-                        }
-                    }
-                } catch (Exception e) {
-                    result.set(e.getMessage());
-                }
+                result.set(processBenchmarkPost(jobRow));
             }
         });
+
+        return result.get();
+    }
+
+    public String processBenchmarkPost(JobRow jobRow){
+        AtomicReference<String> result = new AtomicReference<>("SUCCESS");
+
+        try {
+            BenchmarkTypes benchmarkType = BenchmarkTypes.getColumn(jobRow.getJob());
+
+            if (CsvLoader.isUrlReachable(jobRow.getLastBuildResultFile())) {
+                JSONArray dataJson = getJsonData(jobRow.getLastBuildResultFile());
+                List<BenchmarksRow> benchmarksRows = getCsvData(benchmarkType, dataJson, jobRow);
+
+                boolean hasError = benchmarksRows.size() == 0;
+
+                if (!hasError) {
+                    benchmarksRows.forEach(b -> {
+                        try {
+                            postJsonContent(URI_UPDATE_BENCHMARKS, b);
+                        } catch (URISyntaxException e) {
+                            result.set(e.getMessage());
+                        }
+                    });
+                }
+            }
+        } catch (Exception e) {
+            result.set(e.getMessage());
+        }
 
         return result.get();
     }

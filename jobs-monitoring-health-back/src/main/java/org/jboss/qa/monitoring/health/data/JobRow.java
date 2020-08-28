@@ -4,12 +4,15 @@ import org.jboss.qa.monitoring.health.definitions.JobColumns;
 import org.json.simple.JSONObject;
 
 public class JobRow {
+
     private String id;
     private String job;
     private int active;
     private String folder;
     private String product;
     private String branch;
+    private String schedule;
+    private String subfolder;
     private String apiUrl;
     private String lastBuildApiUrl;
     private String lastBuildResultFile;
@@ -17,7 +20,7 @@ public class JobRow {
     public JobRow() {
     }
 
-    public void parseJobRow(JSONObject job){
+    public void parseJobRow(JSONObject job) {
         if (job.get(JobColumns.ID.getColumn()) != null) {
             this.id = job.get(JobColumns.ID.getColumn()).toString();
         }
@@ -35,6 +38,12 @@ public class JobRow {
         }
         if (job.get(JobColumns.BRANCH.getColumn()) != null) {
             this.branch = job.get(JobColumns.BRANCH.getColumn()).toString();
+        }
+        if (job.get(JobColumns.SUBFOLDER.getColumn()) != null) {
+            this.subfolder = job.get(JobColumns.SUBFOLDER.getColumn()).toString();
+        }
+        if (job.get(JobColumns.SCHEDULE.getColumn()) != null) {
+            this.schedule = job.get(JobColumns.SCHEDULE.getColumn()).toString();
         }
         if (job.get(JobColumns.API_URL.getColumn()) != null) {
             this.apiUrl = job.get(JobColumns.API_URL.getColumn()).toString();
@@ -82,5 +91,13 @@ public class JobRow {
 
     public String getBranch() {
         return branch;
+    }
+
+    public String getSchedule() {
+        return schedule;
+    }
+
+    public String getSubfolder() {
+        return subfolder;
     }
 }
