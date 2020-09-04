@@ -40,37 +40,48 @@ public class BenchmarksService {
     private String URI_UPDATE_BENCHMARKS = "http://jobs-monitoring-health-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com//api/updateBenchmarks";
 
     public String updateBenchmarks() {
-        AtomicReference<String> result = new AtomicReference<>("SUCCESS");
         List<JSONObject> dataJobs = getJsonNestedContent(URI_ALL_JOBS);
+        ArrayList<String> results = new ArrayList<String>();
 
-        dataJobs.forEach(jsonObject -> {
+        for(int i=0; i<dataJobs.size(); i++){
+            JSONObject jsonObject = dataJobs.get(i);
 
             JobRow jobRow = new JobRow();
             jobRow.parseJobRow(jsonObject);
 
             if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks"))) {
-                result.set(processBenchmarkPost(jobRow));
+                try {
+                    results.add(processBenchmarkPost(jobRow));
+                } catch (ResourceNotFoundException e) {
+                    results.add(e.getMessage());
+                }
             }
-        });
+        };
 
-        return result.get();
+        return Arrays.toString(results.toArray());
     }
 
     public String updateBenchmarks(ScheduleType scheduleType) {
-        AtomicReference<String> result = new AtomicReference<>("SUCCESS");
         List<JSONObject> dataJobs = getJsonNestedContent(URI_ALL_JOBS);
+        ArrayList<String> results = new ArrayList<String>();
 
-        dataJobs.forEach(jsonObject -> {
+          for(int i=0; i<dataJobs.size(); i++){
+            JSONObject jsonObject = dataJobs.get(i);
 
             JobRow jobRow = new JobRow();
             jobRow.parseJobRow(jsonObject);
 
-            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks")) && (jobRow.getSchedule().equals(scheduleType.getColumn()))) {
-                result.set(processBenchmarkPost(jobRow));
+            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks")) &&
+                    (jobRow.getSchedule().equals(scheduleType.getColumn()))) {
+                try {
+                    results.add(processBenchmarkPost(jobRow));
+                } catch (ResourceNotFoundException e) {
+                    results.add(e.getMessage());
+                }
             }
-        });
+        }
 
-        return result.get();
+        return Arrays.toString(results.toArray());
     }
 
     public String updateBenchmark(String benchmark) {
@@ -78,7 +89,6 @@ public class BenchmarksService {
         List<JSONObject> dataJobs = getJsonNestedContent(URI_ALL_JOBS);
 
         dataJobs.forEach(jsonObject -> {
-
             JobRow jobRow = new JobRow();
             jobRow.parseJobRow(jsonObject);
 
@@ -91,8 +101,8 @@ public class BenchmarksService {
         return result.get();
     }
 
-    public String processBenchmarkPost(JobRow jobRow){
-        AtomicReference<String> result = new AtomicReference<>("SUCCESS");
+    public String processBenchmarkPost(JobRow jobRow) {
+        AtomicReference<String> result = new AtomicReference<>(jobRow.getJob() + ": SUCCESS");
 
         try {
             BenchmarkTypes benchmarkType = BenchmarkTypes.getColumn(jobRow.getJob());
@@ -108,12 +118,12 @@ public class BenchmarksService {
                         try {
                             postJsonContent(URI_UPDATE_BENCHMARKS, b);
                         } catch (URISyntaxException e) {
-                            result.set(e.getMessage());
+                            result.set(jobRow.getJob() + ": FAILED - " + e.getMessage());
                         }
                     });
                 }
             } else {
-                throw new ResourceNotFoundException(String.format("CSV file not found on Jenkins server at %s", jobRow.getLastBuildResultFile()));
+                throw new ResourceNotFoundException(jobRow.getJob() + ": FAILED - " + String.format("CSV file not found on Jenkins server at %s", jobRow.getLastBuildResultFile()));
             }
         } catch (Exception e) {
             result.set(e.getMessage());

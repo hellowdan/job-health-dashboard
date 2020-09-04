@@ -24,10 +24,11 @@ public class BenchmarksController {
 
         String result = benchmarksService.updateBenchmarks();
 
-        if (result.equals("SUCCESS")) {
+        if (result.contains("SUCCESS")) {
+            headers.add("SUCCESS", result);
             return new ResponseEntity<Void>(headers, HttpStatus.OK);
         } else {
-            headers.add("FAIL", result);
+            headers.add("FAILED", result);
             return new ResponseEntity<Void>(headers, HttpStatus.NOT_FOUND);
         }
     }
@@ -38,10 +39,11 @@ public class BenchmarksController {
 
         String result = benchmarksService.updateBenchmark(job);
 
-        if (result.equals("SUCCESS")) {
+        if (result.contains("SUCCESS")) {
+            headers.add("SUCCESS", result);
             return new ResponseEntity<Void>(headers, HttpStatus.OK);
         } else {
-            headers.add("FAIL", result);
+            headers.add("FAILED", result);
             return new ResponseEntity<Void>(headers, HttpStatus.NOT_FOUND);
         }
     }
@@ -52,10 +54,11 @@ public class BenchmarksController {
 
         String result = benchmarksService.updateBenchmarks(ScheduleType.NIGHTLY);
 
-        if (result.equals("SUCCESS")) {
+        if (result.contains("SUCCESS")) {
+            headers.add("SUCCESS", result);
             return new ResponseEntity<Void>(headers, HttpStatus.OK);
         } else {
-            headers.add("FAIL", result);
+            headers.add("FAILED", result);
             return new ResponseEntity<Void>(headers, HttpStatus.NOT_FOUND);
         }
     }
@@ -66,10 +69,11 @@ public class BenchmarksController {
 
         String result = benchmarksService.updateBenchmarks(ScheduleType.WEEKLY);
 
-        if (result.equals("SUCCESS")) {
+        if (result.contains("SUCCESS")) {
+            headers.add("SUCCESS", result);
             return new ResponseEntity<Void>(headers, HttpStatus.OK);
         } else {
-            headers.add("FAIL", result);
+            headers.add("FAILED", result);
             return new ResponseEntity<Void>(headers, HttpStatus.NOT_FOUND);
         }
     }
