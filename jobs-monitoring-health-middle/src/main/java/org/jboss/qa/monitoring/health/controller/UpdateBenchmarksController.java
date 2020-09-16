@@ -37,6 +37,7 @@ public class UpdateBenchmarksController {
         String product = "";
         String branch = "";
         String score = "";
+        String scoreError = "";
 
         if (benchmarkData.get(BenchmarkColumns.JOB.getColumn()) != null) {
             job = benchmarkData.get(BenchmarkColumns.JOB.getColumn()).toString();
@@ -53,7 +54,10 @@ public class UpdateBenchmarksController {
         if (benchmarkData.get(BenchmarkColumns.SCORE.getColumn()) != null) {
             score = benchmarkData.get(BenchmarkColumns.SCORE.getColumn()).toString();
         }
+        if (benchmarkData.get(BenchmarkColumns.SCORE_ERROR.getColumn()) != null) {
+            scoreError = benchmarkData.get(BenchmarkColumns.SCORE_ERROR.getColumn()).toString();
+        }
 
-        return new BenchmarksEntity(job, benchmark, product, branch, score);
+        return new BenchmarksEntity(job, benchmark, product, branch, score, scoreError);
     }
 }

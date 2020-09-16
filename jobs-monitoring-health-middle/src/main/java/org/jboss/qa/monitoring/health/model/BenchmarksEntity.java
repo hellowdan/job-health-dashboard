@@ -36,6 +36,9 @@ public class BenchmarksEntity {
     @Column(name="score")
     private String score;
 
+    @Column(name="score_error")
+    private String scoreError;
+
     @Column(name="day")
     private int day;
 
@@ -58,13 +61,14 @@ public class BenchmarksEntity {
         return id;
     }
 
-    public BenchmarksEntity(String job, String benchmark, String product, String branch, String score) {
+    public BenchmarksEntity(String job, String benchmark, String product, String branch, String score, String scoreError) {
         LocalDate localDate = LocalDate.now();
         this.job = job;
         this.benchmark = benchmark;
         this.product = product;
         this.branch = branch;
         this.score = score;
+        this.scoreError = scoreError;
         this.day = localDate.getDayOfMonth();
         this.month = localDate.getMonthValue();
         this.year = localDate.getYear();
@@ -80,6 +84,7 @@ public class BenchmarksEntity {
                 ", product='" + product + '\'' +
                 ", branch='" + branch + '\'' +
                 ", score=" + score +
+                ", scoreError=" + scoreError +
                 '}';
     }
 }

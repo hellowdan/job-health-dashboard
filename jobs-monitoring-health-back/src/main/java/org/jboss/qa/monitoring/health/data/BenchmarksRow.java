@@ -10,6 +10,7 @@ public abstract class BenchmarksRow {
     protected String branch;
     protected String product;
     protected String score;
+    protected String scoreError;
 
     public BenchmarksRow() {
     }
@@ -54,6 +55,14 @@ public abstract class BenchmarksRow {
         return product;
     }
 
+    public String getScoreError() {
+        return scoreError;
+    }
+
+    public void setScoreError(String scoreError) {
+        this.scoreError = scoreError;
+    }
+
     @Override
     public String toString() {
         return "BenchmarksRow{" +
@@ -62,6 +71,7 @@ public abstract class BenchmarksRow {
                 ", branch='" + branch + '\'' +
                 ", product='" + product + '\'' +
                 ", score=" + score +
+                ", scoreError=" + scoreError +
                 '}';
     }
 
@@ -75,6 +85,9 @@ public abstract class BenchmarksRow {
         }
         if (reportRow.get(CsvFileColumns.SCORE.getColumn()) != null) {
             this.score = reportRow.get(CsvFileColumns.SCORE.getColumn()).toString();
+        }
+        if (reportRow.get(CsvFileColumns.SCORE_ERROR.getColumn()) != null) {
+            this.scoreError = reportRow.get(CsvFileColumns.SCORE_ERROR.getColumn()).toString();
         }
     }
 }

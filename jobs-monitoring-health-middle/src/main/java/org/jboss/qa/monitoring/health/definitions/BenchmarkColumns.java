@@ -5,7 +5,8 @@ package org.jboss.qa.monitoring.health.definitions;
         BENCHMARK("benchmark"),
         PRODUCT("product"),
         BRANCH("branch"),
-        SCORE("score");
+        SCORE("score"),
+        SCORE_ERROR("scoreError");
 
         private String column;
 

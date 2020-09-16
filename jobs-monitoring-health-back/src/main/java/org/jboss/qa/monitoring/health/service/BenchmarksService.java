@@ -141,6 +141,7 @@ public class BenchmarksService {
         jsonData.put(BenchmarksColumns.BRANCH.getColumn(), benchmarksRow.getBranch());
         jsonData.put(BenchmarksColumns.PRODUCT.getColumn(), benchmarksRow.getProduct());
         jsonData.put(BenchmarksColumns.SCORE.getColumn(), benchmarksRow.getScore());
+        jsonData.put(BenchmarksColumns.SCORE_ERROR.getColumn(), benchmarksRow.getScoreError());
 
         ResponseEntity<String> result = restTemplate.postForEntity(uri, jsonData, String.class);
     }
