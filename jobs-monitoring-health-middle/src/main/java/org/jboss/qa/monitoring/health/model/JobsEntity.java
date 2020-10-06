@@ -33,7 +33,7 @@ public class JobsEntity {
     private String subfolder;
     @Column(name = "url")
     private String url;
-    @Column(name = "api_Url")
+    @Column(name = "api_url")
     private String apiUrl;
     @Column(name = "last_build_api_url")
     private String lastBuildApiUrl;
