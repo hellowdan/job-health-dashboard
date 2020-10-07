@@ -10,9 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,8 +49,39 @@ public class JobsController {
     }
 
     @GetMapping(value = "/test")
-    public String test(){
-        return "Sucesso!";
+    public String connectionTest(){
+        return "Success!";
     }
 
+    @DeleteMapping("job/{id}")
+    public ResponseEntity<Void> deleteJob(@PathVariable("id") int id) {
+        jobsService.deleteJob(id);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @PutMapping("/update-job")
+    public ResponseEntity<Void> updateJob(@RequestBody JobsEntity jobsEntity, UriComponentsBuilder builder) {
+        jobsService.saveJob(jobsEntity);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(builder.path("/job/{id}").buildAndExpand(jobsEntity.getId()).toUri());
+        return new ResponseEntity<Void>(headers, HttpStatus.OK);
+    }
+
+    @GetMapping(value="add-branch/origin/{originBranch}/target/{targetBranch}")
+    public ResponseEntity<Void> addBranch(@PathVariable("originBranch") String originBranch, @PathVariable("targetBranch") String targetBranch) {
+        jobsService.copyJobsFromBranch(originBranch, targetBranch);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @GetMapping("/activate-branch/{branch}")
+    public ResponseEntity<Void> activateBranch(@PathVariable("branch") String branch) {
+        jobsService.changeBranchActivation(branch, "1");
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @GetMapping("/deactivate-branch/{branch}")
+    public ResponseEntity<Void> deactivateBranch(@PathVariable("branch") String branch) {
+        jobsService.changeBranchActivation(branch, "0");
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
 }

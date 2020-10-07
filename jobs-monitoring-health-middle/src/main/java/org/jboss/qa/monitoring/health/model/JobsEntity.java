@@ -97,6 +97,42 @@ public class JobsEntity {
         return subfolder;
     }
 
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
+    }
+
+    public void setSubfolder(String subfolder) {
+        this.subfolder = subfolder;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setApiUrl(String apiUrl) {
+        this.apiUrl = apiUrl;
+    }
+
+    public void setLastBuildApiUrl(String lastBuildApiUrl) {
+        this.lastBuildApiUrl = lastBuildApiUrl;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return "JobsStatusEntity{" +

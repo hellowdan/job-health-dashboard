@@ -38,4 +38,34 @@ public class JobsService {
         jobsRepository.delete(getJobById(jobsId));
     }
 
+    public void copyJobsFromBranch(String originBranch, String targetBranch){
+        jobsRepository.findAll().forEach(e -> {
+            if(e.getBranch().equals(originBranch)){
+                JobsEntity jobsEntity = new JobsEntity();
+                jobsEntity.setJob(e.getJob());
+                jobsEntity.setProduct(e.getProduct());
+                jobsEntity.setBranch(targetBranch);
+                jobsEntity.setFolder(e.getFolder());
+                jobsEntity.setSchedule(e.getSchedule());
+                jobsEntity.setSubfolder(e.getSubfolder());
+                jobsEntity.setUrl(e.getUrl().replace(originBranch, targetBranch));
+                jobsEntity.setApiUrl(e.getApiUrl().replace(originBranch, targetBranch));
+                jobsEntity.setLastBuildApiUrl(e.getLastBuildApiUrl().replace(originBranch, targetBranch));
+                jobsEntity.setActive(1);
+
+                saveJob(jobsEntity);
+            }
+        });
+    }
+
+    public void changeBranchActivation(String branch, String active) {
+        jobsRepository.findAll().forEach(e -> {
+            if(e.getBranch().equals(branch)){
+                e.setActive(Integer.parseInt(active));
+
+                saveJob(e);
+            }
+        });
+    }
+
 }
