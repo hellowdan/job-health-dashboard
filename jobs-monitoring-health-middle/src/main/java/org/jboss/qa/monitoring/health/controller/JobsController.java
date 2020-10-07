@@ -53,7 +53,7 @@ public class JobsController {
         return "Success!";
     }
 
-    @DeleteMapping("job/{id}")
+    @DeleteMapping("delete-job/{id}")
     public ResponseEntity<Void> deleteJob(@PathVariable("id") int id) {
         jobsService.deleteJob(id);
         return new ResponseEntity<Void>(HttpStatus.OK);
