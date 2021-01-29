@@ -49,7 +49,7 @@ public class BenchmarksService {
             JobRow jobRow = new JobRow();
             jobRow.parseJobRow(jsonObject);
 
-            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks"))) {
+            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks") || jobRow.getFolder().equals("upstream-performance"))) {
                 try {
                     results.add(processBenchmarkPost(jobRow));
                 } catch (ResourceNotFoundException e) {
@@ -71,7 +71,7 @@ public class BenchmarksService {
             JobRow jobRow = new JobRow();
             jobRow.parseJobRow(jsonObject);
 
-            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks")) &&
+            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks") || jobRow.getFolder().equals("upstream-performance")) &&
                     (jobRow.getSchedule().equals(scheduleType.getColumn()))) {
                 try {
                     results.add(processBenchmarkPost(jobRow));
@@ -92,7 +92,7 @@ public class BenchmarksService {
             JobRow jobRow = new JobRow();
             jobRow.parseJobRow(jsonObject);
 
-            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks"))
+            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks") || jobRow.getFolder().equals("upstream-performance"))
                     && (jobRow.getJob().equals(benchmark))) {
                 result.set(processBenchmarkPost(jobRow));
             }
