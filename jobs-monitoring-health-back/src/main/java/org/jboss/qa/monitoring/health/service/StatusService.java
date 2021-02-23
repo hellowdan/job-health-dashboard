@@ -28,6 +28,7 @@ public class StatusService {
         AtomicReference<String> result = new AtomicReference<>("SUCCESS");
         List<JSONObject> dataJobs = getJsonNestedContent(URI_ALL_JOBS);
 
+
         dataJobs.forEach(jsonObject -> {
             JobRow jobRow = new JobRow();
             jobRow.parseJobRow(jsonObject);
@@ -37,9 +38,9 @@ public class StatusService {
                     JSONObject dataJsonLastBuild = getJsonContent(jobRow.getLastBuildApiUrl());
                     JSONObject dataJsonJob = getJsonContent(jobRow.getApiUrl());
 
-                    boolean hasError = ((dataJsonLastBuild.containsKey("Error"))||(dataJsonJob.containsKey("Error")));
+                    boolean hasError = ((dataJsonLastBuild.containsKey("Error")) || (dataJsonJob.containsKey("Error")));
 
-                    if(!hasError) {
+                    if (!hasError) {
                         JSONObject dataJSON = mergeJSONObjects(dataJsonLastBuild, dataJsonJob, jobRow.getId());
                         postJsonContent(URI_UPDATE_STATUS, dataJSON);
                     }
