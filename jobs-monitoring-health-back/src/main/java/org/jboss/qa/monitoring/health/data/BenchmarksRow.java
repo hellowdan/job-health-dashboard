@@ -10,7 +10,7 @@ public abstract class BenchmarksRow {
     protected String branch;
     protected String product;
     protected String score;
-    protected String scoreError;
+    protected double scoreError;
 
     public BenchmarksRow() {
     }
@@ -55,11 +55,11 @@ public abstract class BenchmarksRow {
         return product;
     }
 
-    public String getScoreError() {
+    public double getScoreError() {
         return scoreError;
     }
 
-    public void setScoreError(String scoreError) {
+    public void setScoreError(double scoreError) {
         this.scoreError = scoreError;
     }
 
@@ -86,8 +86,9 @@ public abstract class BenchmarksRow {
         if (reportRow.get(CsvFileColumns.SCORE.getColumn()) != null) {
             this.score = reportRow.get(CsvFileColumns.SCORE.getColumn()).toString();
         }
-        if (reportRow.get(CsvFileColumns.SCORE_ERROR.getColumn()) != null) {
-            this.scoreError = reportRow.get(CsvFileColumns.SCORE_ERROR.getColumn()).toString();
+        Object score_error = reportRow.get(CsvFileColumns.SCORE_ERROR.getColumn());
+        if ( score_error!= null && !score_error.toString().equals("NaN")) {
+            this.scoreError = Double.parseDouble(score_error.toString());
         }
     }
 }

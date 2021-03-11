@@ -9,7 +9,9 @@ package org.jboss.qa.monitoring.health.definitions;
         SESSION("blessed-perf-session-benchmarks"),
         BUILDTIME("blessed-perf-turtle-buildtime-benchmarks"),
         RUNTIME("blessed-perf-turtle-runtime-benchmarks"),
-        RUNTIME_MULTITHREADED("blessed-perf-turtle-runtime-multithreaded-benchmarks");
+        RUNTIME_MULTITHREADED("blessed-perf-turtle-runtime-multithreaded-benchmarks"),
+        //JBPM
+        JBPM("jbpm-perf-jmh");
 
         private String column;
 
