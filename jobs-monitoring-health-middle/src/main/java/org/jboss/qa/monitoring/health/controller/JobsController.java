@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" )
+@CrossOrigin(origins = {"*"}, maxAge = 4800, allowCredentials = "false")
 @RestController
 @RequestMapping(value = "api")
 public class JobsController {
@@ -40,7 +40,7 @@ public class JobsController {
         return new ResponseEntity<JobsEntity>(jobsEntity, HttpStatus.OK);
     }
 
-    @PostMapping(value="add-job", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PostMapping(value = "add-job", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Void> addJob(@RequestBody JobsEntity jobsEntity, UriComponentsBuilder builder) {
         jobsService.saveJob(jobsEntity);
         HttpHeaders headers = new HttpHeaders();
@@ -49,7 +49,7 @@ public class JobsController {
     }
 
     @GetMapping(value = "/test")
-    public String connectionTest(){
+    public String connectionTest() {
         return "Success!";
     }
 
@@ -59,15 +59,15 @@ public class JobsController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @PutMapping("/update-job")
-    public ResponseEntity<Void> updateJob(@RequestBody JobsEntity jobsEntity, UriComponentsBuilder builder) {
-        jobsService.saveJob(jobsEntity);
+    @PutMapping(value = "/update-job/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<JobsEntity> updateJob(@RequestBody JobsEntity jobsEntity, @PathVariable("id") int id, UriComponentsBuilder builder) {
+        jobsService.saveJob(id, jobsEntity);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(builder.path("/job/{id}").buildAndExpand(jobsEntity.getId()).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.OK);
+        return new ResponseEntity<JobsEntity>(headers, HttpStatus.OK);
     }
 
-    @GetMapping(value="add-branch/origin/{originBranch}/target/{targetBranch}")
+    @GetMapping(value = "add-branch/origin/{originBranch}/target/{targetBranch}")
     public ResponseEntity<Void> addBranch(@PathVariable("originBranch") String originBranch, @PathVariable("targetBranch") String targetBranch) {
         jobsService.copyJobsFromBranch(originBranch, targetBranch);
         return new ResponseEntity<Void>(HttpStatus.OK);

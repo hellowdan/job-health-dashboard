@@ -34,6 +34,23 @@ public class JobsService {
         jobsRepository.save(jobsEntity);
     }
 
+    public void saveJob(int jobsId, JobsEntity jobsEntity) {
+        JobsEntity currentJobsEntity = getJobById(jobsId);
+
+        currentJobsEntity.setJob(jobsEntity.getJob());
+        currentJobsEntity.setProduct(jobsEntity.getProduct());
+        currentJobsEntity.setBranch(jobsEntity.getBranch());
+        currentJobsEntity.setFolder(jobsEntity.getFolder());
+        currentJobsEntity.setSchedule(jobsEntity.getSchedule());
+        currentJobsEntity.setSubfolder(jobsEntity.getSubfolder());
+        currentJobsEntity.setUrl(jobsEntity.getUrl());
+        currentJobsEntity.setApiUrl(jobsEntity.getApiUrl());
+        currentJobsEntity.setLastBuildApiUrl(jobsEntity.getLastBuildApiUrl());
+        currentJobsEntity.setActive(jobsEntity.getActive());
+
+        jobsRepository.save(currentJobsEntity);
+    }
+
     public void deleteJob(int jobsId) {
         jobsRepository.delete(getJobById(jobsId));
     }
