@@ -55,24 +55,40 @@ public class JobsService {
         jobsRepository.delete(getJobById(jobsId));
     }
 
-    public void copyJobsFromBranch(String originBranch, String targetBranch){
-        jobsRepository.findAll().forEach(e -> {
-            if(e.getBranch().equals(originBranch)){
-                JobsEntity jobsEntity = new JobsEntity();
-                jobsEntity.setJob(e.getJob());
-                jobsEntity.setProduct(e.getProduct());
-                jobsEntity.setBranch(targetBranch);
-                jobsEntity.setFolder(e.getFolder());
-                jobsEntity.setSchedule(e.getSchedule());
-                jobsEntity.setSubfolder(e.getSubfolder());
-                jobsEntity.setUrl(e.getUrl().replace(originBranch, targetBranch));
-                jobsEntity.setApiUrl(e.getApiUrl().replace(originBranch, targetBranch));
-                jobsEntity.setLastBuildApiUrl(e.getLastBuildApiUrl().replace(originBranch, targetBranch));
-                jobsEntity.setActive(1);
+    public void copyJobsFromBranch(String originBranch, String targetBranch, String replacedValuesInUrl, String newValuesInUrl){
+        String[] arrOfReplacedValues = replacedValuesInUrl.split("|");
+        String[] arrOfNewValues = newValuesInUrl.split("|");
 
-                saveJob(jobsEntity);
-            }
-        });
+        if (arrOfReplacedValues.length == arrOfNewValues.length) {
+            jobsRepository.findAll().forEach(e -> {
+                if (e.getBranch().equals(originBranch)) {
+
+                    String url = e.getUrl().replace(originBranch, targetBranch);
+                    String apiUrl = e.getApiUrl().replace(originBranch, targetBranch);
+                    String lastBuildApiUrl = e.getLastBuildApiUrl().replace(originBranch, targetBranch);
+
+                    for(int i=0; i<arrOfReplacedValues.length; i++){
+                        url = url.replace(arrOfReplacedValues[i], arrOfNewValues[i]);
+                        apiUrl = apiUrl.replace(arrOfReplacedValues[i], arrOfNewValues[i]);
+                        lastBuildApiUrl = lastBuildApiUrl.replace(arrOfReplacedValues[i], arrOfNewValues[i]);
+                    }
+
+                    JobsEntity jobsEntity = new JobsEntity();
+                    jobsEntity.setJob(e.getJob());
+                    jobsEntity.setProduct(e.getProduct());
+                    jobsEntity.setBranch(targetBranch);
+                    jobsEntity.setFolder(e.getFolder());
+                    jobsEntity.setSchedule(e.getSchedule());
+                    jobsEntity.setSubfolder(e.getSubfolder());
+                    jobsEntity.setUrl(url);
+                    jobsEntity.setApiUrl(apiUrl);
+                    jobsEntity.setLastBuildApiUrl(lastBuildApiUrl);
+                    jobsEntity.setActive(1);
+
+                    saveJob(jobsEntity);
+                }
+            });
+        }
     }
 
     public void changeBranchActivation(String branch, String active) {

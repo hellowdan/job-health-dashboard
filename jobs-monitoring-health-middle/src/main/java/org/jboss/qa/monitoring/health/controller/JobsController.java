@@ -67,9 +67,12 @@ public class JobsController {
         return new ResponseEntity<JobsEntity>(headers, HttpStatus.OK);
     }
 
-    @GetMapping(value = "add-branch/origin/{originBranch}/target/{targetBranch}")
-    public ResponseEntity<Void> addBranch(@PathVariable("originBranch") String originBranch, @PathVariable("targetBranch") String targetBranch) {
-        jobsService.copyJobsFromBranch(originBranch, targetBranch);
+    @GetMapping(value = "add-branch/origin/{originBranch}/target/{targetBranch}/replacedValuesInUrl/{replacedValuesInUrl}/newValuesInUrl/{newValuesInUrl}")
+    public ResponseEntity<Void> addBranch(@PathVariable("originBranch") String originBranch,
+                                          @PathVariable("targetBranch") String targetBranch,
+                                          @PathVariable("replacedValuesInUrl") String replacedValuesInUrl,
+                                          @PathVariable("newValuesInUrl") String newValuesInUrl) {
+        jobsService.copyJobsFromBranch(originBranch, targetBranch, replacedValuesInUrl, newValuesInUrl);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
