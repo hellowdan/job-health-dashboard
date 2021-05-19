@@ -56,8 +56,8 @@ public class JobsService {
     }
 
     public void copyJobsFromBranch(String originBranch, String targetBranch, String replacedValuesInUrl, String newValuesInUrl){
-        String[] arrOfReplacedValues = replacedValuesInUrl.split("|");
-        String[] arrOfNewValues = newValuesInUrl.split("|");
+        String[] arrOfReplacedValues = replacedValuesInUrl.split("\\|");
+        String[] arrOfNewValues = newValuesInUrl.split("\\|");
 
         if (arrOfReplacedValues.length == arrOfNewValues.length) {
             jobsRepository.findAll().forEach(e -> {
