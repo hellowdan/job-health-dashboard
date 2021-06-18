@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,35 @@ public class StatusController {
         String result = statusService.updateStatus();
 
         if (result.equals("SUCCESS")) {
+            return new ResponseEntity<Void>(headers, HttpStatus.OK);
+        } else {
+            headers.add("FAIL", result);
+            return new ResponseEntity<Void>(headers, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping(value = "/updateStatusSubfolder/{subfolder}")
+    public ResponseEntity<Void> updateStatusSubfolder(@PathVariable("subfolder") String subfolder) {
+        HttpHeaders headers = new HttpHeaders();
+
+        String result = statusService.updateStatusSubfolder(subfolder);
+
+        if (result.contains("SUCCESS")) {
+            return new ResponseEntity<Void>(headers, HttpStatus.OK);
+        } else {
+            headers.add("FAIL", result);
+            return new ResponseEntity<Void>(headers, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping(value = "/updateStatus/{job}")
+    public ResponseEntity<Void> updateStatus(@PathVariable("job") String job) {
+        HttpHeaders headers = new HttpHeaders();
+
+        String result = statusService.updateStatus(job);
+
+        if (result.equals("SUCCESS")) {
+            headers.add("SUCCESS", result);
             return new ResponseEntity<Void>(headers, HttpStatus.OK);
         } else {
             headers.add("FAIL", result);
