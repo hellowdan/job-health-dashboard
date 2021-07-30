@@ -24,7 +24,7 @@ public class StatusController {
 
         String result = statusService.updateStatus();
 
-        if (result.equals("SUCCESS")) {
+        if (result.contains("SUCCESS")) {
             return new ResponseEntity<Void>(headers, HttpStatus.OK);
         } else {
             headers.add("FAIL", result);
@@ -52,7 +52,7 @@ public class StatusController {
 
         String result = statusService.updateStatus(job);
 
-        if (result.equals("SUCCESS")) {
+        if (result.contains("SUCCESS")) {
             headers.add("SUCCESS", result);
             return new ResponseEntity<Void>(headers, HttpStatus.OK);
         } else {
