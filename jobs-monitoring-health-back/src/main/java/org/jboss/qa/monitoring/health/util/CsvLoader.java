@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,13 +42,15 @@ public class CsvLoader {
         try {
             input = getFileObjectFromJenkins(csfFilePath);
 
-            CsvSchema csvSchema = CsvSchema.builder().setUseHeader(true).build();
+            CsvSchema csvSchema = CsvSchema.builder().setUseHeader(true).setAllowComments(true).build();
             CsvMapper csvMapper = new CsvMapper();
 
             List<Object> readAll = null;
             readAll = csvMapper.readerFor(Map.class).with(csvSchema).readValues((BufferedReader) input).readAll();
 
             ObjectMapper mapper = new ObjectMapper();
+            // Removes records with empty values, in practise used to skip blank lines in CSV
+            readAll.removeIf(metric -> mapper.convertValue(metric, LinkedHashMap.class).containsValue(""));
             mapper.writerWithDefaultPrettyPrinter().writeValue(output, readAll);
 
             reader = new FileReader(output);

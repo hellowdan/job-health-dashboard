@@ -12,6 +12,7 @@ import org.jboss.qa.monitoring.health.data.BenchmarksRow;
 import org.jboss.qa.monitoring.health.data.BuildtimeRow;
 import org.jboss.qa.monitoring.health.data.CepRow;
 import org.jboss.qa.monitoring.health.data.DmnRow;
+import org.jboss.qa.monitoring.health.data.JbpmRow;
 import org.jboss.qa.monitoring.health.data.JobRow;
 import org.jboss.qa.monitoring.health.data.OopathRow;
 import org.jboss.qa.monitoring.health.data.OperatorsRow;
@@ -49,7 +50,7 @@ public class BenchmarksService {
             JobRow jobRow = new JobRow();
             jobRow.parseJobRow(jsonObject);
 
-            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks"))) {
+            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks") || jobRow.getFolder().equals("upstream-performance"))) {
                 try {
                     results.add(processBenchmarkPost(jobRow));
                 } catch (ResourceNotFoundException e) {
@@ -71,7 +72,7 @@ public class BenchmarksService {
             JobRow jobRow = new JobRow();
             jobRow.parseJobRow(jsonObject);
 
-            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks")) &&
+            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks") || jobRow.getFolder().equals("upstream-performance")) &&
                     (jobRow.getSchedule().equals(scheduleType.getColumn()))) {
                 try {
                     results.add(processBenchmarkPost(jobRow));
@@ -92,7 +93,7 @@ public class BenchmarksService {
             JobRow jobRow = new JobRow();
             jobRow.parseJobRow(jsonObject);
 
-            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks"))
+            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks") || jobRow.getFolder().equals("upstream-performance"))
                     && (jobRow.getJob().equals(benchmark))) {
                 result.set(processBenchmarkPost(jobRow));
             }
@@ -201,6 +202,11 @@ public class BenchmarksService {
                 case RUNTIME_MULTITHREADED:
                     benchmarksRow = new RuntimeRow(true);
                     break;
+                case JBPM:
+                    benchmarksRow = new JbpmRow();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Benchmark type determination not successful");
             }
 
             benchmarksRow.parseReportRow((JSONObject) resultRow, jobRow);
