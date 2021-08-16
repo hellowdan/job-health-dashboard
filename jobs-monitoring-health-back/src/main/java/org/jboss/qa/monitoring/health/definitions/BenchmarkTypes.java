@@ -1,15 +1,15 @@
 package org.jboss.qa.monitoring.health.definitions;
 
     public enum BenchmarkTypes {
-        DMN("blessed-perf-dmn-benchmarks"),
-        EVENT_PROCESSING("blessed-perf-event-processing-benchmarks"),
-        EVENT_PROCESSING_MULTITHREADED("blessed-perf-event-processing-multithreaded-benchmarks"),
-        OOPATH("blessed-perf-oopath-benchmarks"),
-        OPERATORS("blessed-perf-operators-benchmarks"),
-        SESSION("blessed-perf-session-benchmarks"),
-        BUILDTIME("blessed-perf-turtle-buildtime-benchmarks"),
-        RUNTIME("blessed-perf-turtle-runtime-benchmarks"),
-        RUNTIME_MULTITHREADED("blessed-perf-turtle-runtime-multithreaded-benchmarks"),
+        DMN("perf-dmn-benchmarks"),
+        EVENT_PROCESSING("perf-event-processing-benchmarks"),
+        EVENT_PROCESSING_MULTITHREADED("perf-event-processing-multithreaded-benchmarks"),
+        OOPATH("perf-oopath-benchmarks"),
+        OPERATORS("perf-operators-benchmarks"),
+        SESSION("perf-session-benchmarks"),
+        BUILDTIME("perf-turtle-buildtime-benchmarks"),
+        RUNTIME("perf-turtle-runtime-benchmarks"),
+        RUNTIME_MULTITHREADED("perf-turtle-runtime-multithreaded-benchmarks"),
         //JBPM
         JBPM("jbpm-perf-jmh");
 
