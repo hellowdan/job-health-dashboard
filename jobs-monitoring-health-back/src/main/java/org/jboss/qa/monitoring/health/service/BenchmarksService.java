@@ -176,30 +176,39 @@ public class BenchmarksService {
             BenchmarksRow benchmarksRow = null;
             switch (benchmarkType) {
                 case DMN:
+                case UPSTREAM_DMN:
                     benchmarksRow = new DmnRow();
                     break;
                 case EVENT_PROCESSING:
+                case UPSTREAM_EVENT_PROCESSING:
                     benchmarksRow = new CepRow(false);
                     break;
                 case EVENT_PROCESSING_MULTITHREADED:
+                case UPSTREAM_EVENT_PROCESSING_MULTITHREADED:
                     benchmarksRow = new CepRow(true);
                     break;
                 case OOPATH:
+                case UPSTREAM_OOPATH:
                     benchmarksRow = new OopathRow();
                     break;
                 case OPERATORS:
+                case UPSTREAM_OPERATORS:
                     benchmarksRow = new OperatorsRow();
                     break;
                 case SESSION:
+                case UPSTREAM_SESSION:
                     benchmarksRow = new SessionRow();
                     break;
-                case BUILDTIME:
+                case TURTLE_BUILDTIME:
+                case UPSTREAM_TURTLE_BUILDTIME:
                     benchmarksRow = new BuildtimeRow();
                     break;
-                case RUNTIME:
+                case TURTLE_RUNTIME:
+                case UPSTREAM_TURTLE_RUNTIME:
                     benchmarksRow = new RuntimeRow(false);
                     break;
-                case RUNTIME_MULTITHREADED:
+                case TURTLE_RUNTIME_MULTITHREADED:
+                case UPSTREAM_TURTLE_RUNTIME_MULTITHREADED:
                     benchmarksRow = new RuntimeRow(true);
                     break;
                 case JBPM:
