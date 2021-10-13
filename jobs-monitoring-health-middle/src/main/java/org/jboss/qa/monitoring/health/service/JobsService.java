@@ -20,13 +20,13 @@ public class JobsService {
         return jobsEntities;
     }
 
-    public JobsEntity getJobById(long jobsStatusId) {
-        JobsEntity jobsEntity = jobsRepository.findById(jobsStatusId).get();
+    public JobsEntity getJobById(long jobsId) {
+        JobsEntity jobsEntity = jobsRepository.findById(jobsId).get();
         return jobsEntity;
     }
 
-    public JobsEntity getJobById(String jobsStatusId) {
-        long jobId = Long.parseLong(jobsStatusId);
+    public JobsEntity getJobById(String jobsId) {
+        long jobId = Long.parseLong(jobsId);
         return getJobById(jobId);
     }
 
