@@ -1,7 +1,5 @@
 package org.jboss.qa.monitoring.health.controller;
 
-import java.util.List;
-
 import org.jboss.qa.monitoring.health.model.JobsLastBuildEntity;
 import org.jboss.qa.monitoring.health.service.JobsLastBuildService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,11 @@ public class JobsLastBuildController {
 
     @GetMapping(value = "getJobLastBuild/{id}")
     public ResponseEntity<JobsLastBuildEntity> getJobLastBuild(@PathVariable("id") int id) {
-        JobsLastBuildEntity jobsLastBuildEntityEntity = jobsLastBuildService.getJobById(id);
-        return new ResponseEntity<JobsLastBuildEntity>(jobsLastBuildEntityEntity, HttpStatus.OK);
+        try {
+            JobsLastBuildEntity jobsLastBuildEntity = jobsLastBuildService.getJobById(id);
+            return new ResponseEntity<JobsLastBuildEntity>(jobsLastBuildEntity, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<JobsLastBuildEntity>(new JobsLastBuildEntity(), HttpStatus.NOT_FOUND);
+        }
     }
 }
