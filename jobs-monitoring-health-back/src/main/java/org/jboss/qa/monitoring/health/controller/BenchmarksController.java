@@ -22,7 +22,22 @@ public class BenchmarksController {
     public ResponseEntity<Void> updateBenchmarks() {
         HttpHeaders headers = new HttpHeaders();
 
-        String result = benchmarksService.updateBenchmarks();
+        String result = benchmarksService.updateOnlyNewBuilds();
+
+        if (result.contains("SUCCESS")) {
+            headers.add("SUCCESS", result);
+            return new ResponseEntity<Void>(headers, HttpStatus.OK);
+        } else {
+            headers.add("FAILED", result);
+            return new ResponseEntity<Void>(headers, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping(value = "/forceUpdateBenchmarks")
+    public ResponseEntity<Void> forceUpdateBenchmarks() {
+        HttpHeaders headers = new HttpHeaders();
+
+        String result = benchmarksService.updateAllBenchmarks();
 
         if (result.contains("SUCCESS")) {
             headers.add("SUCCESS", result);
@@ -77,5 +92,4 @@ public class BenchmarksController {
             return new ResponseEntity<Void>(headers, HttpStatus.NOT_FOUND);
         }
     }
-
 }
