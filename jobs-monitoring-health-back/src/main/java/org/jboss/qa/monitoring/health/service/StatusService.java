@@ -114,12 +114,12 @@ public class StatusService {
         return finalResult;
     }
 
-    public void postJsonContent(String url, JSONObject dataJSON) throws URISyntaxException {
+    private void postJsonContent(String url, JSONObject dataJSON) throws URISyntaxException {
         URI uri = new URI(url);
         ResponseEntity<String> result = restTemplate.postForEntity(uri, dataJSON, String.class);
     }
 
-    public JSONObject getJsonContent(String url) {
+    private JSONObject getJsonContent(String url) {
         try {
             return this.restTemplate.getForObject(url, JSONObject.class);
         } catch (Exception e) {
@@ -129,7 +129,7 @@ public class StatusService {
         }
     }
 
-    public List<JSONObject> getJsonNestedContent(String url) {
+    private List<JSONObject> getJsonNestedContent(String url) {
         try {
             JSONObject[] result = this.restTemplate.getForObject(url, JSONObject[].class);
             return Arrays.asList(result);
@@ -140,7 +140,7 @@ public class StatusService {
         }
     }
 
-    public JSONObject mergeJSONObjects(JSONObject dataJsonLastBuild, JSONObject dataJsonJob, String jobId) {
+    private JSONObject mergeJSONObjects(JSONObject dataJsonLastBuild, JSONObject dataJsonJob, String jobId) {
         JSONObject result = new JSONObject();
 
         result.put(StatusColumns.JOB_ID.getColumn(), jobId);

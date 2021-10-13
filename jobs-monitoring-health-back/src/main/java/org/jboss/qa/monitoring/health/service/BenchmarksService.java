@@ -21,6 +21,7 @@ import org.jboss.qa.monitoring.health.data.SessionRow;
 import org.jboss.qa.monitoring.health.definitions.BenchmarkTypes;
 import org.jboss.qa.monitoring.health.definitions.BenchmarksColumns;
 import org.jboss.qa.monitoring.health.definitions.ScheduleType;
+import org.jboss.qa.monitoring.health.definitions.StatusColumns;
 import org.jboss.qa.monitoring.health.util.CsvLoader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -37,14 +38,61 @@ public class BenchmarksService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private String URI_ALL_JOBS = "http://jobs-monitoring-health-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com//api/jobs";
-    private String URI_UPDATE_BENCHMARKS = "http://jobs-monitoring-health-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com//api/updateBenchmarks";
+    private String URI_ALL_JOBS = "http://jobs-monitoring-health-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/jobs";
+    private String URI_UPDATE_BENCHMARKS = "http://jobs-monitoring-health-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/updateBenchmarks";
+    private String URI_JOB_LAST_BUILD = "http://jobs-monitoring-health-baqe-jobs-dashboards.6923.rh-us-east-1.openshiftapps.com/api/getJobLastBuild/${jobId}";
 
-    public String updateBenchmarks() {
+    public String updateOnlyNewBuilds() {
         List<JSONObject> dataJobs = getJsonNestedContent(URI_ALL_JOBS);
         ArrayList<String> results = new ArrayList<String>();
 
-        for(int i=0; i<dataJobs.size(); i++){
+        for (int i = 0; i < dataJobs.size(); i++) {
+            JSONObject jsonObject = dataJobs.get(i);
+
+            JobRow jobRow = new JobRow();
+            jobRow.parseJobRow(jsonObject);
+
+            if ((jobRow.getActive() > 0) && (jobRow.getFolder().equals("RHDM-benchmarks") || jobRow.getFolder().equals("upstream-performance"))) {
+
+                String urlJobLastBuild = URI_JOB_LAST_BUILD.replace("${jobId}", jobRow.getId());
+                JSONObject dataJsonJobLastBuildDashboard = getJsonContent(urlJobLastBuild);
+                JSONObject dataJsonJobLastBuildJenkins = getJsonContent(jobRow.getLastBuildApiUrl());
+
+                if (isJenkinsBuildNumberBigger(dataJsonJobLastBuildDashboard, dataJsonJobLastBuildJenkins)) {
+                    try {
+                        results.add(processBenchmarkPost(jobRow));
+                    } catch (ResourceNotFoundException e) {
+                        results.add(e.getMessage());
+                    }
+                }
+            }
+        }
+
+        return Arrays.toString(results.toArray());
+    }
+
+    private boolean isJenkinsBuildNumberBigger(JSONObject dataJsonJobLastBuildDashboard, JSONObject dataJsonJobLastBuildJenkins) {
+        Double jenkinsLastBuildNumber = 0.0;
+        Double dashboardLastBuildNumber = 0.0;
+
+        if (dataJsonJobLastBuildDashboard.get("last_build_number") != null) {
+            String dashboardBuildNumber = dataJsonJobLastBuildDashboard.get("last_build_number").toString();
+            dashboardLastBuildNumber = Double.parseDouble(dashboardBuildNumber);
+        }
+
+        if (dataJsonJobLastBuildJenkins.get(StatusColumns.BUILD_NUMBER.getColumn()) != null) {
+            String jenkinsBuildNumber = dataJsonJobLastBuildJenkins.get(StatusColumns.BUILD_NUMBER.getColumn()).toString();
+            jenkinsLastBuildNumber = Double.parseDouble(jenkinsBuildNumber);
+        }
+
+        return jenkinsLastBuildNumber > dashboardLastBuildNumber;
+    }
+
+    public String updateAllBenchmarks() {
+        List<JSONObject> dataJobs = getJsonNestedContent(URI_ALL_JOBS);
+        ArrayList<String> results = new ArrayList<String>();
+
+        for (int i = 0; i < dataJobs.size(); i++) {
             JSONObject jsonObject = dataJobs.get(i);
 
             JobRow jobRow = new JobRow();
@@ -57,7 +105,7 @@ public class BenchmarksService {
                     results.add(e.getMessage());
                 }
             }
-        };
+        }
 
         return Arrays.toString(results.toArray());
     }
@@ -66,7 +114,7 @@ public class BenchmarksService {
         List<JSONObject> dataJobs = getJsonNestedContent(URI_ALL_JOBS);
         ArrayList<String> results = new ArrayList<String>();
 
-          for(int i=0; i<dataJobs.size(); i++){
+        for (int i = 0; i < dataJobs.size(); i++) {
             JSONObject jsonObject = dataJobs.get(i);
 
             JobRow jobRow = new JobRow();
@@ -222,5 +270,15 @@ public class BenchmarksService {
             benchmarksRows.add(benchmarksRow);
         });
         return benchmarksRows;
+    }
+
+    private JSONObject getJsonContent(String url) {
+        try {
+            return this.restTemplate.getForObject(url, JSONObject.class);
+        } catch (Exception e) {
+            JSONObject error = new JSONObject();
+            error.put("Error", e.getMessage());
+            return error;
+        }
     }
 }
