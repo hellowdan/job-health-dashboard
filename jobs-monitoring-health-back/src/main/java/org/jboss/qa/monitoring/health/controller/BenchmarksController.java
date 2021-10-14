@@ -24,7 +24,7 @@ public class BenchmarksController {
 
         String result = benchmarksService.updateOnlyNewBuilds();
 
-        if (result.contains("SUCCESS")) {
+        if ((result.contains("SUCCESS")) || (result.contains("[]"))) {
             headers.add("SUCCESS", result);
             return new ResponseEntity<Void>(headers, HttpStatus.OK);
         } else {
