@@ -50,7 +50,7 @@ public class CsvLoader {
 
             ObjectMapper mapper = new ObjectMapper();
             // Removes records with empty values, in practise used to skip blank lines in CSV
-            readAll.removeIf(metric -> mapper.convertValue(metric, LinkedHashMap.class).containsValue(""));
+            readAll.removeIf(metric -> mapper.convertValue(metric, LinkedHashMap.class).get("Benchmark").equals(""));
             mapper.writerWithDefaultPrettyPrinter().writeValue(output, readAll);
 
             reader = new FileReader(output);
