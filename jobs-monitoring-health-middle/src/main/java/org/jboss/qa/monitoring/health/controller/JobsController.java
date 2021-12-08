@@ -34,6 +34,12 @@ public class JobsController {
         return new ResponseEntity<List<JobsEntity>>(jobsEntityList, HttpStatus.OK);
     }
 
+    @GetMapping(value = "active-jobs")
+    public ResponseEntity<List<JobsEntity>> getActiveJobs() {
+        List<JobsEntity> jobsEntityList = jobsService.getActiveJobs();
+        return new ResponseEntity<List<JobsEntity>>(jobsEntityList, HttpStatus.OK);
+    }
+
     @GetMapping(value = "job/{id}")
     public ResponseEntity<JobsEntity> getJob(@PathVariable("id") int id) {
         JobsEntity jobsEntity = jobsService.getJobById(id);

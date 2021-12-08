@@ -20,6 +20,16 @@ public class JobsService {
         return jobsEntities;
     }
 
+    public List<JobsEntity> getActiveJobs(){
+        List<JobsEntity> jobsEntities = new ArrayList<>();
+        jobsRepository.findAll().forEach(e -> {
+            if(e.getActive() > 0){
+                jobsEntities.add(e);
+            }
+        });
+        return jobsEntities;
+    }
+
     public JobsEntity getJobById(long jobsId) {
         JobsEntity jobsEntity = jobsRepository.findById(jobsId).get();
         return jobsEntity;
